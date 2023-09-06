@@ -1,52 +1,52 @@
-import React from 'react';
+// import React from 'react';
 
-import styles from './styles.module.css';
-import { Button } from '../../common';
+// import styles from './styles.module.css';
+// import { Button } from '../../common';
 
-export const CourseForm = ({authorsList, createCourse, createAuthor}) => {
+// export const CourseForm = ({authorsList, createCourse, createAuthor}) => {
 
-	//write your code here
-	const saveCourseBtn = 'SAVE COURSE';
+// 	//write your code here
+// 	const saveCourseBtn = 'SAVE COURSE';
 
-	const handleSubmit = () => {};
+// 	const handleSubmit = () => {};
 
-	return (
-		<form onSubmit={handleSubmit}>
-			<div>
-				{/* // reuse Input component for title field with data-testid="titleInput" */}
+// 	return (
+// 		<form onSubmit={handleSubmit}>
+// 			<div>
+// 				{/* // reuse Input component for title field with data-testid="titleInput" */}
 
-				{/* // reuse Button component for 'Save course' button with data-testid="createCourseButton" */}
-				<Button buttonText={saveCourseBtn} handleClick={() => {}} data-testid="createCourseButton" />
-			</div>
+// 				{/* // reuse Button component for 'Save course' button with data-testid="createCourseButton" */}
+// 				<Button buttonText={saveCourseBtn} handleClick={() => {}} data-testid="createCourseButton" />
+// 			</div>
 
-			<label>
-				Description
-				<textarea data-testid="descriptionTextArea" />
-			</label>
+// 			<label>
+// 				Description
+// 				<textarea data-testid="descriptionTextArea" />
+// 			</label>
 
-			<div className={styles.infoWrapper}>
-				<div>
-					{/* // use CreateAuthor component */}
+// 			<div className={styles.infoWrapper}>
+// 				<div>
+// 					{/* // use CreateAuthor component */}
 
-					{/* // reuse Input component with data-testid='durationInput' for duration field */}
+// 					{/* // reuse Input component with data-testid='durationInput' for duration field */}
 
-					<p>Duration: </p>
-				</div>
+// 					<p>Duration: </p>
+// 				</div>
 
-				<div className={styles.authorsContainer}>
-					<strong>Authors</strong>
+// 				<div className={styles.authorsContainer}>
+// 					<strong>Authors</strong>
 
-					{/* // use 'map' to display all available autors. Reuse 'AuthorItem' component for each author */}
+// 					{/* // use 'map' to display all available autors. Reuse 'AuthorItem' component for each author */}
 
-					<strong>Course authors</strong>
+// 					<strong>Course authors</strong>
 
-					{/* // use 'map' to display course's autors */}
-					{/* <p data-testid="selectedAuthor"}>{author.name}</p> */}
+// 					{/* // use 'map' to display course's autors */}
+// 					{/* <p data-testid="selectedAuthor"}>{author.name}</p> */}
 
-					<p className={styles.notification}>List is empty</p>
-					{/* // display this paragraph if there are no authors in the course */}
-				</div>
-			</div>
-		</form>
-	);
-};
+// 					<p className={styles.notification}>List is empty</p>
+// 					{/* // display this paragraph if there are no authors in the course */}
+// 				</div>
+// 			</div>
+// 		</form>
+// 	);
+// };
