@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styles from './styles.module.css';
 import { Button, Searchbar } from '../../common';
 import { CourseCard } from './components';
+import { EmptyCourseList } from './components/EmptyCourseList/EmptyCourseList';
 
 export const Courses = ({coursesList, authorsList, handleShowCourse}) => {
 	const buttonText = 'ADD NEW COURSE';
@@ -54,23 +55,5 @@ export const Courses = ({coursesList, authorsList, handleShowCourse}) => {
 			</div> 
 			:
 			<EmptyCourseList />
-	);
-};
-
-const EmptyCourseList = () => {
-	const buttonText = "ADD NEW COURSE";
-	const styles = {
-		display: 'flex',
-		justifycontent: 'center',
-		alignItems: 'center',
-		flexDirection: 'column'
-	};
-
-	return (
-		<div data-testid="emptyContainer" style={styles}>
-			<h1>Your List Is Empty</h1>
-			<p>Please use "Add New Course" button to add your first course</p>
-			<Button buttonText={buttonText} handleClick={() => {}} data-testid="addCourse" />
-		</div>
 	);
 };
