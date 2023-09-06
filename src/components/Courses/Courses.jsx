@@ -32,7 +32,10 @@ export const Courses = ({coursesList, authorsList, handleShowCourse}) => {
 			course.authors.forEach(id => {
 				authorNames.push(authorsList.find(author => author.id === id).name);
 			});
-			return <CourseCard course={course} authorsList={authorNames} handleShowCourse={() => handleShowCourse(course.id)} key={course.id} />;
+
+			const stringifiedAuthorNames = authorNames.join(', ');
+
+			return <CourseCard course={course} authorsList={stringifiedAuthorNames} handleShowCourse={() => handleShowCourse(course.id)} key={course.id} />;
 		});
 	};
 
