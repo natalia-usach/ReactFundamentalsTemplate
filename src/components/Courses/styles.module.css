@@ -1,5 +1,12 @@
+.mainContent {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 50px 50px;
+}
+
 .panel {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin: 16px 0;
 }

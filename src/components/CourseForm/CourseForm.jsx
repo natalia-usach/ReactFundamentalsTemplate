@@ -1,46 +1,52 @@
-// import React from 'react';
+import React from 'react';
 
-// import styles from './styles.module.css';
+import styles from './styles.module.css';
+import { Button } from '../../common';
 
-// export const CourseForm = ({authorsList, createCourse, createAuthor}) => {
+export const CourseForm = ({authorsList, createCourse, createAuthor}) => {
 
-// 	//write your code here
+	//write your code here
+	const saveCourseBtn = 'SAVE COURSE';
 
-// 	return (
-// 		<form onSubmit={handleSubmit}>
-// 			<div>
-// 				// reuse Input component for title field with data-testid="titleInput"
+	const handleSubmit = () => {};
 
-// 				// reuse Button component for 'Save course' button with data-testid="createCourseButton"
-// 			</div>
+	return (
+		<form onSubmit={handleSubmit}>
+			<div>
+				{/* // reuse Input component for title field with data-testid="titleInput" */}
 
-// 			<label>
-// 				Description
-// 				<textarea data-testid="descriptionTextArea" />
-// 			</label>
+				{/* // reuse Button component for 'Save course' button with data-testid="createCourseButton" */}
+				<Button buttonText={saveCourseBtn} handleClick={() => {}} data-testid="createCourseButton" />
+			</div>
 
-// 			<div className={styles.infoWrapper}>
-// 				<div>
-// 					// use CreateAuthor component
+			<label>
+				Description
+				<textarea data-testid="descriptionTextArea" />
+			</label>
 
-// 					// reuse Input component with data-testid='durationInput' for duration field
+			<div className={styles.infoWrapper}>
+				<div>
+					{/* // use CreateAuthor component */}
 
-// 					<p>Duration: </p>
-// 				</div>
+					{/* // reuse Input component with data-testid='durationInput' for duration field */}
 
-// 				<div className={styles.authorsContainer}>
-// 					<strong>Authors</strong>
+					<p>Duration: </p>
+				</div>
 
-// 					// use 'map' to display all available autors. Reuse 'AuthorItem' component for each author
+				<div className={styles.authorsContainer}>
+					<strong>Authors</strong>
 
-// 					<strong>Course authors</strong>
+					{/* // use 'map' to display all available autors. Reuse 'AuthorItem' component for each author */}
 
-// 					// use 'map' to display course's autors
-// 					{/* <p data-testid="selectedAuthor"}>{author.name}</p> */}
+					<strong>Course authors</strong>
 
-// 					<p className={styles.notification}>List is empty</p> // display this paragraph if there are no authors in the course
-// 				</div>
-// 			</div>
-// 		</form>
-// 	);
-// };
+					{/* // use 'map' to display course's autors */}
+					{/* <p data-testid="selectedAuthor"}>{author.name}</p> */}
+
+					<p className={styles.notification}>List is empty</p>
+					{/* // display this paragraph if there are no authors in the course */}
+				</div>
+			</div>
+		</form>
+	);
+};

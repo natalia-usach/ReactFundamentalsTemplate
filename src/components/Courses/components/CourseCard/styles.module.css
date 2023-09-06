@@ -1,9 +1,12 @@
 .cardContainer {
   display: flex;
   padding: 8px 16px;
-  border: 1px solid black;
+  border: 1px solid grey;
+  border-radius: 10px;
   justify-content: space-between;
   gap: 16px;
+  margin-bottom: 10px;
+  box-shadow: grey 5px 5px 5px;
 }
 
 .cardText {
@@ -18,11 +21,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-}
-
-.buttonGroup {
-  display: flex;
-  gap: 10px;
 }
 
 .buttonGroup {

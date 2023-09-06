@@ -1,27 +1,32 @@
-// import React from 'react';
+import React from 'react';
 
-// import styles from './styles.module.css';
+import styles from './styles.module.css';
+import { Button } from '../../common';
 
-// export const Login = () => {
+export const Login = () => {
 	
-// 	// write your code here
+	// write your code here
+	const buttonText = 'LOGIN';
 
-// 	return (
-// 		<div className={styles.container}>
-// 			<form onSubmit={handleSubmit}>
-// 				<h1>Login</h1>
+	const handleSubmit = () => {};
 
-// 				// reurse Input component for email field
+	return (
+		<div className={styles.container}>
+			<form onSubmit={handleSubmit}>
+				<h1>Login</h1>
 
-// 				// reurse Input component for password field
+				{/* // reurse Input component for email field */}
 
-// 				// reurse Button component for 'Login' button
+				{/* // reurse Input component for password field */}
 
-// 			</form>
-// 			<p>
-// 				If you don't have an account you can&nbsp;
-// 				<a>register</a>
-// 			</p>
-// 		</div>
-// 	);
-// };
+				{/* // reurse Button component for 'Login' button */}
+				<Button buttonText={buttonText} handleClick={() => {}} />
+
+			</form>
+			<p>
+				If you don't have an account you can&nbsp;
+				{/* <a>register</a> */}
+			</p>
+		</div>
+	);
+};

@@ -1,21 +1,21 @@
 import React from 'react';
 
 import styles from './styles.module.css';
+import { Button } from '../../common';
+import { Logo } from './components';
 
 export const Header = () => {
 	
 	// write your cose here
+	const isAuthorized = false;
+	const buttonText = isAuthorized ? 'LOGOUT' : 'LOGIN';
 
 	return (
 		<div className={styles.headerContainer}>
-
-			// use Logo component
-
+			<Logo />
 			<div className={styles.userContainer}>
 				<p className={styles.userName}>Boris</p>
-				
-				// reuse Button component for 'Login / Logout' button
-
+				<Button buttonText={buttonText} handleClick={() => {}} />
 			</div>
 		</div>
 	);
