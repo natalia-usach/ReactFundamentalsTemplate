@@ -4,7 +4,7 @@ import styles from './styles.module.css';
 import { getCourseDuration, formatCreationDate } from '../../../../helpers';
 import { Button } from '../../../../common';
 
-export const CourseCard = ({course, authors, handleShowCourse}) => {
+export const CourseCard = ({course, handleShowCourse, authorsList}) => {
 	const showCourseBtnText = 'SHOW COURSE';
 	const deleteCourseBtnText = 'DELETE';
 	const updateCourseBtnText = 'UPDATE';
@@ -18,7 +18,7 @@ export const CourseCard = ({course, authors, handleShowCourse}) => {
 			<div className={styles.cardDetails}>
 				<p>
 					<b>Authors: </b>
-					{authors.join(', ')}
+					{authorsList.join(', ')}
 				</p>
 				<p>
 					<b>Duration: </b>
