@@ -9,6 +9,8 @@ export const CourseCard = ({course, handleShowCourse, authorsList}) => {
 	const deleteCourseBtnText = 'DELETE';
 	const updateCourseBtnText = 'UPDATE';
 
+	const authors = authorsList.join(', ');
+
 	return (
 		<div className={styles.cardContainer} data-testid='courseCard'>
 			<div className={styles.cardText}>
@@ -18,7 +20,7 @@ export const CourseCard = ({course, handleShowCourse, authorsList}) => {
 			<div className={styles.cardDetails}>
 				<p>
 					<b>Authors: </b>
-					{authorsList}
+					{authors}
 				</p>
 				<p>
 					<b>Duration: </b>
