@@ -9,7 +9,15 @@ export const CourseCard = ({course, handleShowCourse, authorsList}) => {
 	const deleteCourseBtnText = 'DELETE';
 	const updateCourseBtnText = 'UPDATE';
 
-	const authors = authorsList.join(', ');
+	const getAuthorNames = () => {
+		const authorNames = [];
+	
+		course.authors.forEach(id => {
+			authorNames.push(authorsList.find(author => author.id === id).name);
+		});
+
+		return authorNames.join(', ');
+	};
 
 	return (
 		<div className={styles.cardContainer} data-testid='courseCard'>
@@ -20,7 +28,7 @@ export const CourseCard = ({course, handleShowCourse, authorsList}) => {
 			<div className={styles.cardDetails}>
 				<p>
 					<b>Authors: </b>
-					{authors}
+					{getAuthorNames()}
 				</p>
 				<p>
 					<b>Duration: </b>

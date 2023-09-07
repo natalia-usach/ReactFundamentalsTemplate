@@ -4,6 +4,7 @@ import styles from './styles.module.css';
 import { Button, Searchbar } from '../../common';
 import { CourseCard } from './components';
 import { EmptyCourseList } from './components/EmptyCourseList/EmptyCourseList';
+import { mockedAuthorsList } from '../../constants';
 
 export const Courses = ({coursesList, authorsList, handleShowCourse}) => {
 	const buttonText = 'ADD NEW COURSE';
@@ -27,13 +28,7 @@ export const Courses = ({coursesList, authorsList, handleShowCourse}) => {
 
 	const getCoursesToRender = () => {
 		return coursesToRender.map(course => {
-			const authorNames = [];
-	
-			course.authors.forEach(id => {
-				authorNames.push(authorsList.find(author => author.id === id).name);
-			});
-
-			return <CourseCard course={course} authorsList={authorNames} handleShowCourse={() => handleShowCourse(course.id)} key={course.id} />;
+			return <CourseCard course={course} authorsList={mockedAuthorsList} handleShowCourse={() => handleShowCourse(course.id)} key={course.id} />;
 		});
 	};
 
