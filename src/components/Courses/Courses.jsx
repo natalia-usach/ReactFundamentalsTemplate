@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 import styles from './styles.module.css';
 import { Button, Searchbar } from '../../common';
-import { CourseCard } from './components';
-import { EmptyCourseList } from './components/EmptyCourseList/EmptyCourseList';
+import { Outlet } from "react-router-dom";
+import { CourseCard, EmptyCourseList } from './components';
 
-export const Courses = ({coursesList, authorsList, handleShowCourse}) => {
+export const Courses = ({coursesList, authorsList}) => {
 	const buttonText = 'ADD NEW COURSE';
 
 	const [searchTxt, setSearchTxt] = useState('');
@@ -27,7 +27,7 @@ export const Courses = ({coursesList, authorsList, handleShowCourse}) => {
 
 	const getCoursesToRender = () => {
 		return coursesToRender.map(course => {
-			return <CourseCard course={course} authorsList={authorsList} handleShowCourse={() => handleShowCourse(course.id)} key={course.id} />;
+			return <CourseCard course={course} authorsList={authorsList} key={course.id} />;
 		});
 	};
 
@@ -42,12 +42,14 @@ export const Courses = ({coursesList, authorsList, handleShowCourse}) => {
 		coursesList.length
 			?
 			<div className={styles.mainContent}>
+								<Outlet />
+
 				<div className={styles.panel}>
 					<Searchbar handleSearch={onSearchClick} onSearchInputChange={onSearchInputChange}/>
 					<Button buttonText={buttonText} handleClick={() => {}} />
 				</div>
 				<div>{getCoursesToRender()}</div>
-			</div> 
+			</div>
 			:
 			<EmptyCourseList />
 	);

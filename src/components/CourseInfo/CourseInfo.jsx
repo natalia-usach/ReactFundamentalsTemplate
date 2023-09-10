@@ -1,14 +1,17 @@
 import React from 'react';
+import { useParams, Link } from "react-router-dom";
 
 import { formatCreationDate, getCourseDuration } from '../../helpers';
 
 import styles from './styles.module.css';
 import { Button } from '../../common';
 
-export const CourseInfo = ({coursesList, authorsList, onBack, showCourseId}) => {
+export const CourseInfo = ({coursesList, authorsList}) => {
 	// Module 2: use 'react-router-dom' 'Link' component for button 'Back'
 	const buttonText = 'BACK';
-	const course = coursesList.find(course => course.id === showCourseId);
+	const { courseId } = useParams();
+
+	const course = coursesList.find(course => course.id === courseId);
 
 	const getAuthorsList = () => {
 		const authorNames = [];
@@ -27,7 +30,7 @@ export const CourseInfo = ({coursesList, authorsList, onBack, showCourseId}) => 
 				<div>
 					<p>
 						<b>ID: </b>
-						{showCourseId}
+						{courseId}
 					</p>
 					<p>
 						<b>Duration: </b>
@@ -46,7 +49,7 @@ export const CourseInfo = ({coursesList, authorsList, onBack, showCourseId}) => 
 				</div>
 			</div>
 			<div className={styles.backBtn}>
-				<Button buttonText={buttonText} handleClick={onBack} />
+				<Link to="/courses"><Button buttonText={buttonText} handleClick={() => {}} /></Link>
 			</div>
 		</div>
 	);

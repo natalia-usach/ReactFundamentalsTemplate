@@ -1,32 +1,85 @@
-// import React from 'react';
+import React, { useState } from 'react';
 
-// import styles from './styles.module.css';
-// import { Button } from '../../common';
+import styles from './styles.module.css';
+import { Button, Input } from '../../common';
+import { Link, useNavigate } from "react-router-dom";
+import { capitalize } from '../../helpers';
+import { login } from '../../services';
 
-// export const Login = () => {
-	
-// 	// write your code here
-// 	const buttonText = 'LOGIN';
+export const Login = () => {
+	const buttonText = 'LOGIN';
+	const formNames = ['email', 'password'];
+    const placeholder = "Input text";
 
-// 	const handleSubmit = () => {};
+	const navigate = useNavigate();
+	const [validationErrors, setValidationErrors] = useState({});
+    const [userData, setUserData] = useState({
+		email: '',
+		password: ''
+	});
+    const [responseError, setResponseError] = useState(null);
 
-// 	return (
-// 		<div className={styles.container}>
-// 			<form onSubmit={handleSubmit}>
-// 				<h1>Login</h1>
+    const onInputChange = (event) => {
+		if (event.target.value.trim()) {
+			const newUser = Object.assign({}, userData);
+			newUser[event.target.name] = event.target.value.trim();
+			setUserData(newUser);
+		}
+	};
 
-// 				{/* // reurse Input component for email field */}
+    const loginUser = async() => {
+		const { successful, result, user } = await login(userData);
 
-// 				{/* // reurse Input component for password field */}
+		if (successful) {
+            window.localStorage.setItem('token', result);
+            window.localStorage.setItem('user', user.name);
+            navigate("/courses");
+        } else {
+            setResponseError(result);
+        }
+	};
 
-// 				{/* // reurse Button component for 'Login' button */}
-// 				<Button buttonText={buttonText} handleClick={() => {}} />
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		const newErrors = Object.assign({}, validationErrors);
+		formNames.forEach(formName => {
+			if (!event.target[formName].value.trim()) {
+				newErrors[formName] = `${capitalize(formName)} is required.`;
+			} else {
+				delete newErrors[formName];
+			}
+		});
+		setValidationErrors(newErrors);
 
-// 			</form>
-// 			<p>
-// 				If you don't have an account you can&nbsp;
-// 				{/* <a>register</a> */}
-// 			</p>
-// 		</div>
-// 	);
-// };
+		if (!Object.keys(newErrors).length) {
+			loginUser();
+		}
+	};
+
+    const renderInputs = () => {
+		return formNames.map(name => {
+			return (
+				<div key={name}>
+					<Input labelText={capitalize(name)} name={name} placeholderText={placeholder} onChange={onInputChange} />
+					<p className={styles.invalid}>{validationErrors[name]}</p>
+				</div>
+			);
+		})
+	};
+
+	return (
+		<div className={styles.container}>
+			<form onSubmit={handleSubmit}>
+				<h1>Login</h1>
+                {renderInputs()}
+				<Button buttonText={buttonText} handleClick={() => {}} />
+
+			</form>
+            <div className={styles.invalid}>{responseError}</div>
+			<p>
+				If you don't have an account you can&nbsp;
+				<Link to="/registration">register</Link>
+			</p>
+		</div>
+	);
+};

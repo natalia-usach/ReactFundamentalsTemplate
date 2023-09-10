@@ -10,3 +10,8 @@
   margin-top: 20px;
   width: 100%;
 }
+
+.invalid {
+  color: red;
+  font-size: 14px;
+}

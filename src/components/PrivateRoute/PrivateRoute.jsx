@@ -1,10 +1,8 @@
-// import React from 'react';
+import React from 'react';
+import { Navigate } from 'react-router-dom'
 
-// export const PrivateRoute = () => {
+export const PrivateRoute = ({}) => {
+    const isAuthorised = !!window.localStorage.getItem('token');
 
-// 	//wriet your code here
-
-// 	return (
-// 			<p>PrivateRoute</p>//wriet your code here instead of this 'p' tag
-// 	);
-// };
+	return isAuthorised ? <Navigate to="/courses" /> : <Navigate to="/login" />;
+};

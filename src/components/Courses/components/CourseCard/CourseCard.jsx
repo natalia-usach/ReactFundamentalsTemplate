@@ -3,8 +3,9 @@ import styles from './styles.module.css';
 
 import { getCourseDuration, formatCreationDate } from '../../../../helpers';
 import { Button } from '../../../../common';
+import { Link } from "react-router-dom";
 
-export const CourseCard = ({course, handleShowCourse, authorsList}) => {
+export const CourseCard = ({course, authorsList}) => {
 	const showCourseBtnText = 'SHOW COURSE';
 	const deleteCourseBtnText = 'DELETE';
 	const updateCourseBtnText = 'UPDATE';
@@ -39,7 +40,7 @@ export const CourseCard = ({course, handleShowCourse, authorsList}) => {
 					<span>{formatCreationDate(course.creationDate)}</span>
 				</p>
 				<div className={styles.buttonGroup}>
-					<Button buttonText={showCourseBtnText} handleClick={handleShowCourse} />
+					<Link to={`/courses/${course.id}`}><Button buttonText={showCourseBtnText} /></Link>
 					<Button buttonText={deleteCourseBtnText} handleClick={() => {}} data-testid="deleteCourse" />
 					<Button buttonText={updateCourseBtnText} handleClick={() => {}} data-testid="updateCourse" />
 				</div>

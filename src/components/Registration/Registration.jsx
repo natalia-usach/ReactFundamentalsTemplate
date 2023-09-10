@@ -1,32 +1,90 @@
-// import React from 'react';
+import React, {useState} from 'react';
 
-// import styles from './styles.module.css';
-// import { Button } from '../../common';
+import styles from './styles.module.css';
+import { Button, Input } from '../../common';
+import { Link, useNavigate } from "react-router-dom";
+import { capitalize } from '../../helpers';
+import { createUser } from '../../services';
 
-// export const Registration = () => {
-	
-// 	// write your code here
-// 	const buttonText = 'LOGIN';
+export const Registration = () => {
+	const buttonText = 'REGISTRATION';
+	const formNames = ['name', 'email', 'password'];
+	const placeholder = "Input text";
 
-// 	const handleSubmit = () => {};
+	const navigate = useNavigate();
+	const [validationErrors, setValidationErrors] = useState({});
+	const [user, setUser] = useState({
+		name: '',
+		email: '',
+		password: ''
+	});
 
-// 	return (
-// 		<div className={styles.container}>
-// 			<form onSubmit={handleSubmit}>
-// 				<h1>Registration</h1>
-// 				{/* // reurse Input component for email field */}
+	const [responseError, setResponseError] = useState(null);
 
-// 				{/* // reurse Input component for name field */}
+	const onInputChange = (event) => {
+		if (event.target.value.trim()) {
+			const newUser = Object.assign({}, user);
+			newUser[event.target.name] = event.target.value.trim();
+			setUser(newUser);
+		}
+	};
 
-// 				{/* // reurse Input component for password field */}
+	// const sendNewUser = async() => {
+	// 	const response = await fetch('http://localhost:4000/register', {
+	// 		method: 'POST',
+	// 		body: JSON.stringify(user),
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 	});
+			
+	// 	const { successful, errors } = await response.json();
 
-// 				{/* // reurse Button component for 'Login' button */}
-// 				<Button buttonText={buttonText} handleClick={() => {}} />
-// 			</form>
-// 			<p>
-// 				If you have an account you can&nbsp;
-// 				{/* <a>log in</a> */}
-// 			</p>
-// 		</div>
-// 	);
-// };
+	// 	successful ? navigate("/login") : setResponseError([...errors]);
+	// };
+
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		const newErrors = Object.assign({}, validationErrors);
+		formNames.forEach(formName => {
+			if (!event.target[formName].value.trim()) {
+				newErrors[formName] = `${capitalize(formName)} is required.`;
+			} else {
+				delete newErrors[formName];
+			}
+		});
+		setValidationErrors(newErrors);
+
+		if (!Object.keys(newErrors).length) {
+			const { errors } = await createUser(user);
+
+			errors ? setResponseError([...errors]) : navigate("/login");
+		}
+	};
+
+	const renderInputs = () => {
+		return formNames.map(name => {
+			return (
+				<div key={name}>
+					<Input labelText={capitalize(name)} name={name} placeholderText={placeholder} onChange={onInputChange} />
+					<p className={styles.invalid}>{validationErrors[name]}</p>
+				</div>
+			);
+		})
+	};
+
+	return (
+		<div className={styles.container}>
+			<form onSubmit={handleSubmit}>
+				<h1>Registration</h1>
+				{renderInputs()}
+				<Button buttonText={buttonText} handleClick={() => {}} />
+			</form>
+			<div className={styles.invalid}>{responseError}</div>
+			<p>
+				If you have an account you can&nbsp;
+				<Link to="/login">login</Link>
+			</p>
+		</div>
+	);
+};
