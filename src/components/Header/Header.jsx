@@ -1,16 +1,17 @@
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import styles from './styles.module.css';
 import { Button } from '../../common';
 import { Logo } from './components';
-import { useNavigate, useLocation } from "react-router-dom";
+
+import styles from './styles.module.css';
 
 export const Header = () => {
 	const isAuthorized = !!window.localStorage.getItem('token');
 	const userName = window.localStorage.getItem('user');
 	const buttonText = isAuthorized ? 'LOGOUT' : 'LOGIN';
 	const navigate = useNavigate();
-	const {pathname} = useLocation();
+	const { pathname } = useLocation();
 
 	const onBtnClick = () => {
 		navigate('/login');

@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import styles from './styles.module.css';
 import { Button, Input } from '../../common';
-import { Link, useNavigate } from "react-router-dom";
 import { capitalize } from '../../helpers';
 import { login } from '../../services';
+
+import styles from './styles.module.css';
 
 export const Login = () => {
 	const buttonText = 'LOGIN';
 	const formNames = ['email', 'password'];
-    const placeholder = "Input text";
+	const placeholder = 'Input text';
 
 	const navigate = useNavigate();
 	const [validationErrors, setValidationErrors] = useState({});
-    const [userData, setUserData] = useState({
+	const [userData, setUserData] = useState({
 		email: '',
-		password: ''
+		password: '',
 	});
-    const [responseError, setResponseError] = useState(null);
+	const [responseError, setResponseError] = useState(null);
 
-    const onInputChange = (event) => {
+	const onInputChange = (event) => {
 		if (event.target.value.trim()) {
 			const newUser = Object.assign({}, userData);
 			newUser[event.target.name] = event.target.value.trim();
@@ -27,22 +28,22 @@ export const Login = () => {
 		}
 	};
 
-    const loginUser = async() => {
+	const loginUser = async () => {
 		const { successful, result, user } = await login(userData);
 
 		if (successful) {
-            window.localStorage.setItem('token', result);
-            window.localStorage.setItem('user', user.name);
-            navigate("/courses");
-        } else {
-            setResponseError(result);
-        }
+			window.localStorage.setItem('token', result);
+			window.localStorage.setItem('user', user.name);
+			navigate('/courses');
+		} else {
+			setResponseError(result);
+		}
 	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const newErrors = Object.assign({}, validationErrors);
-		formNames.forEach(formName => {
+		formNames.forEach((formName) => {
 			if (!event.target[formName].value.trim()) {
 				newErrors[formName] = `${capitalize(formName)} is required.`;
 			} else {
@@ -56,29 +57,33 @@ export const Login = () => {
 		}
 	};
 
-    const renderInputs = () => {
-		return formNames.map(name => {
+	const renderInputs = () => {
+		return formNames.map((name) => {
 			return (
 				<div key={name}>
-					<Input labelText={capitalize(name)} name={name} placeholderText={placeholder} onChange={onInputChange} />
+					<Input
+						labelText={capitalize(name)}
+						name={name}
+						placeholderText={placeholder}
+						onChange={onInputChange}
+					/>
 					<p className={styles.invalid}>{validationErrors[name]}</p>
 				</div>
 			);
-		})
+		});
 	};
 
 	return (
 		<div className={styles.container}>
 			<form onSubmit={handleSubmit}>
 				<h1>Login</h1>
-                {renderInputs()}
+				{renderInputs()}
 				<Button buttonText={buttonText} handleClick={() => {}} />
-
 			</form>
-            <div className={styles.invalid}>{responseError}</div>
+			<div className={styles.invalid}>{responseError}</div>
 			<p>
 				If you don't have an account you can&nbsp;
-				<Link to="/registration">register</Link>
+				<Link to='/registration'>register</Link>
 			</p>
 		</div>
 	);

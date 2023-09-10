@@ -1,5 +1,5 @@
 export const formatCreationDate = (date) => {
-  if (date) {
-    return date.split('/').join('.');
-  }
-}
+	if (date) {
+		return date.split('/').join('.');
+	}
+};

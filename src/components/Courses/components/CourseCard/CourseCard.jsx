@@ -1,20 +1,21 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
+import { Button } from '../../../../common';
+import { formatCreationDate, getCourseDuration } from '../../../../helpers';
+
 import styles from './styles.module.css';
 
-import { getCourseDuration, formatCreationDate } from '../../../../helpers';
-import { Button } from '../../../../common';
-import { Link } from "react-router-dom";
-
-export const CourseCard = ({course, authorsList}) => {
+export const CourseCard = ({ course, authorsList }) => {
 	const showCourseBtnText = 'SHOW COURSE';
 	const deleteCourseBtnText = 'DELETE';
 	const updateCourseBtnText = 'UPDATE';
 
 	const getAuthorNames = () => {
 		const authorNames = [];
-	
-		course.authors.forEach(id => {
-			authorNames.push(authorsList.find(author => author.id === id).name);
+
+		course.authors.forEach((id) => {
+			authorNames.push(authorsList.find((author) => author.id === id).name);
 		});
 
 		return authorNames.join(', ');
@@ -40,9 +41,19 @@ export const CourseCard = ({course, authorsList}) => {
 					<span>{formatCreationDate(course.creationDate)}</span>
 				</p>
 				<div className={styles.buttonGroup}>
-					<Link to={`/courses/${course.id}`}><Button buttonText={showCourseBtnText} /></Link>
-					<Button buttonText={deleteCourseBtnText} handleClick={() => {}} data-testid="deleteCourse" />
-					<Button buttonText={updateCourseBtnText} handleClick={() => {}} data-testid="updateCourse" />
+					<Link to={`/courses/${course.id}`}>
+						<Button buttonText={showCourseBtnText} />
+					</Link>
+					<Button
+						buttonText={deleteCourseBtnText}
+						handleClick={() => {}}
+						data-testid='deleteCourse'
+					/>
+					<Button
+						buttonText={updateCourseBtnText}
+						handleClick={() => {}}
+						data-testid='updateCourse'
+					/>
 				</div>
 			</div>
 		</div>
