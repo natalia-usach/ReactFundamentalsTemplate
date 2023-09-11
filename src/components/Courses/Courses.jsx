@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
@@ -12,7 +12,6 @@ const Courses = ({ coursesList, authorsList }) => {
 	const buttonText = 'ADD NEW COURSE';
 	const [searchTxt, setSearchTxt] = useState('');
 	const [coursesToRender, setCoursesToRender] = useState(coursesList);
-	const navigate = useNavigate();
 
 	const onSearchInputChange = (value) => {
 		if (!value) {
@@ -54,10 +53,9 @@ const Courses = ({ coursesList, authorsList }) => {
 					handleSearch={onSearchClick}
 					onSearchInputChange={onSearchInputChange}
 				/>
-				<Button
-					buttonText={buttonText}
-					handleClick={() => navigate('/courses/add')}
-				/>
+				<Link to='/courses/add'>
+					<Button buttonText={buttonText} />
+				</Link>
 			</div>
 			<div>{getCoursesToRender()}</div>
 		</div>

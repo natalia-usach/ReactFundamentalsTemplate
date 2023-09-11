@@ -22,7 +22,11 @@ export const Header = () => {
 	};
 
 	const renderUserContainer = () => {
-		if (pathname === '/login' || pathname === '/registration') {
+		if (
+			pathname === '/login' ||
+			pathname === '/registration' ||
+			!window.localStorage.getItem('token')
+		) {
 			return;
 		} else {
 			return (
