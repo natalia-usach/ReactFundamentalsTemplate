@@ -107,7 +107,7 @@ const CourseForm = ({
 						key={author.id}
 						name={author.name}
 						forCourse={true}
-						onDeleteAuthor={(event, i) => deleteAuthor(event, author.id)}
+						onDeleteAuthor={(event) => deleteAuthor(event, author.id)}
 					/>
 				))}
 			</div>
@@ -186,11 +186,11 @@ const CourseForm = ({
 			<div className={styles.authorsList}>
 				<strong>Authors list</strong>
 				<br></br>
-				{authorsList.map((author, i) => (
+				{authorsList.map((author) => (
 					<AuthorItem
 						key={author.id}
 						name={author.name}
-						onAddAuthor={(event, i) => addAuthor(event, author.id)}
+						onAddAuthor={(event) => addAuthor(event, author.id)}
 						forCourse={false}
 					/>
 				))}
