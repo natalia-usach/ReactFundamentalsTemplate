@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+
+import PropTypes from 'prop-types';
 
 import { Button, Searchbar } from '../../common';
 import { CourseCard, EmptyCourseList } from './components';
 
 import styles from './styles.module.css';
 
-export const Courses = ({ coursesList, authorsList }) => {
+const Courses = ({ coursesList, authorsList }) => {
 	const buttonText = 'ADD NEW COURSE';
-
 	const [searchTxt, setSearchTxt] = useState('');
 	const [coursesToRender, setCoursesToRender] = useState(coursesList);
+	const navigate = useNavigate();
 
 	const onSearchInputChange = (value) => {
 		if (!value) {
@@ -43,9 +45,6 @@ export const Courses = ({ coursesList, authorsList }) => {
 		setFilteredCourses();
 	};
 
-	// for EmptyCourseListComponent container use data-testid="emptyContainer" attribute
-	// for button in EmptyCourseListComponent add data-testid="addCourse" attribute
-
 	return coursesList.length ? (
 		<div className={styles.mainContent}>
 			<Outlet />
@@ -55,7 +54,10 @@ export const Courses = ({ coursesList, authorsList }) => {
 					handleSearch={onSearchClick}
 					onSearchInputChange={onSearchInputChange}
 				/>
-				<Button buttonText={buttonText} handleClick={() => {}} />
+				<Button
+					buttonText={buttonText}
+					handleClick={() => navigate('/courses/add')}
+				/>
 			</div>
 			<div>{getCoursesToRender()}</div>
 		</div>
@@ -63,3 +65,10 @@ export const Courses = ({ coursesList, authorsList }) => {
 		<EmptyCourseList />
 	);
 };
+
+Courses.propTypes = {
+	coursesList: PropTypes.array,
+	authorsList: PropTypes.array,
+};
+
+export { Courses };

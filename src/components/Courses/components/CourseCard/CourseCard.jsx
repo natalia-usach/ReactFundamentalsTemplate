@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import PropTypes from 'prop-types';
+
 import { Button } from '../../../../common';
 import { formatCreationDate, getCourseDuration } from '../../../../helpers';
 
 import styles from './styles.module.css';
 
-export const CourseCard = ({ course, authorsList }) => {
+const CourseCard = ({ course, authorsList }) => {
 	const showCourseBtnText = 'SHOW COURSE';
 	const deleteCourseBtnText = 'DELETE';
 	const updateCourseBtnText = 'UPDATE';
@@ -59,3 +61,10 @@ export const CourseCard = ({ course, authorsList }) => {
 		</div>
 	);
 };
+
+CourseCard.propTypes = {
+	course: PropTypes.object,
+	authorsList: PropTypes.array,
+};
+
+export { CourseCard };

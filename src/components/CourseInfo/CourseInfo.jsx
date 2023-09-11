@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import PropTypes from 'prop-types';
+
 import { Button } from '../../common';
 import { formatCreationDate, getCourseDuration } from '../../helpers';
 
 import styles from './styles.module.css';
 
-export const CourseInfo = ({ coursesList, authorsList }) => {
+const CourseInfo = ({ coursesList, authorsList }) => {
 	// Module 2: use 'react-router-dom' 'Link' component for button 'Back'
 	const buttonText = 'BACK';
 	const { courseId } = useParams();
@@ -54,3 +56,10 @@ export const CourseInfo = ({ coursesList, authorsList }) => {
 		</div>
 	);
 };
+
+CourseInfo.propTypes = {
+	coursesList: PropTypes.array,
+	authorsList: PropTypes.array,
+};
+
+export { CourseInfo };

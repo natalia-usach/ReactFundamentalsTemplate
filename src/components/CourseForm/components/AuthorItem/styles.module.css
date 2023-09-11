@@ -1,5 +1,6 @@
 .authorItem {
   display: flex;
+  width: 30%;
   justify-content: space-between;
   margin-top: 16px;
   align-items: flex-end;

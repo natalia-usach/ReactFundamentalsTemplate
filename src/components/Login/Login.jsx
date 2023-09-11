@@ -29,14 +29,14 @@ export const Login = () => {
 	};
 
 	const loginUser = async () => {
-		const { successful, result, user } = await login(userData);
+		const { successful, result, user, errors } = await login(userData);
 
 		if (successful) {
 			window.localStorage.setItem('token', result);
 			window.localStorage.setItem('user', user.name);
 			navigate('/courses');
 		} else {
-			setResponseError(result);
+			setResponseError(errors ? errors[0] : result);
 		}
 	};
 

@@ -1,12 +1,10 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 import styles from './styles.module.css';
 
-export const Button = ({
-	buttonText,
-	handleClick,
-	'data-testid': dataTestId,
-}) => (
+const Button = ({ buttonText, handleClick, 'data-testid': dataTestId }) => (
 	<button
 		className={styles.button}
 		onClick={handleClick}
@@ -15,3 +13,11 @@ export const Button = ({
 		{buttonText}
 	</button>
 );
+
+Button.propTypes = {
+	buttonText: PropTypes.string,
+	handleClick: PropTypes.func,
+	'data-testid': PropTypes.string,
+};
+
+export { Button };

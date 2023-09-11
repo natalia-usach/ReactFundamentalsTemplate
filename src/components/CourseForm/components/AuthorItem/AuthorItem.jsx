@@ -1,17 +1,35 @@
-// import React from 'react';
+import React from 'react';
 
-// import styles from './styles.module.css';
-// import { Button } from '../../../../common';
+import PropTypes from 'prop-types';
 
-// export const AuthorItem = () => {
-// 	const buttonText = 'ADD AUTHOR';
+import { Button } from '../../../../common';
 
-// 	return (
-// 		<div className={styles.authorItem} data-testid='authorItem'>
-// 			<span>Boris Smith</span>
+import styles from './styles.module.css';
 
-// 			// reuse Button component for 'Add author' button with data-testid="addAuthor" attribute
-// 			<Button buttonText={buttonText} handleClick={() => {}} data-testid="addAuthor" />
-// 		</div>
-// 	);
-// }
+const AuthorItem = ({ name, onAddAuthor, onDeleteAuthor, forCourse }) => {
+	return (
+		<div className={styles.authorItem} data-testid='authorItem'>
+			<span>{name}</span>
+			<div>
+				{!forCourse ? (
+					<Button
+						buttonText='+'
+						handleClick={onAddAuthor}
+						data-testid='addAuthor'
+					/>
+				) : (
+					<Button buttonText='&#128465;' handleClick={onDeleteAuthor} />
+				)}
+			</div>
+		</div>
+	);
+};
+
+AuthorItem.propTypes = {
+	name: PropTypes.string,
+	onAddAuthor: PropTypes.func,
+	onDeleteAuthor: PropTypes.func,
+	forCourse: PropTypes.bool,
+};
+
+export { AuthorItem };

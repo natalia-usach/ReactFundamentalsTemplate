@@ -1,52 +1,216 @@
-// import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-// import styles from './styles.module.css';
-// import { Button } from '../../common';
+import PropTypes from 'prop-types';
 
-// export const CourseForm = ({authorsList, createCourse, createAuthor}) => {
+import { Button, Input } from '../../common';
+import { capitalize, getCourseDuration } from '../../helpers';
+import { getFormattedDate } from '../../helpers/getFormattedDate';
+import { AuthorItem, CreateAuthor } from './components';
 
-// 	//write your code here
-// 	const saveCourseBtn = 'SAVE COURSE';
+import styles from './styles.module.css';
 
-// 	const handleSubmit = () => {};
+const CourseForm = ({
+	authorsList,
+	createCourse,
+	createAuthor,
+	addAuthor,
+	deleteAuthor,
+	courseAuthors,
+	onCancel,
+}) => {
+	const saveCourseBtn = 'SAVE COURSE';
+	const textInputNames = ['title', 'description'];
+	const [validationErrors, setValidationErrors] = useState({});
+	const [authorNameError, setAuthorNameError] = useState('');
+	const [durationValue, setDurationValue] = useState('');
+	const [courseData, setCourseData] = useState({
+		title: '',
+		description: '',
+		creationDate: null,
+		duration: null,
+		authors: [],
+	});
+	const [authorName, setAuthorName] = useState('');
 
-// 	return (
-// 		<form onSubmit={handleSubmit}>
-// 			<div>
-// 				{/* // reuse Input component for title field with data-testid="titleInput" */}
+	const navigate = useNavigate();
 
-// 				{/* // reuse Button component for 'Save course' button with data-testid="createCourseButton" */}
-// 				<Button buttonText={saveCourseBtn} handleClick={() => {}} data-testid="createCourseButton" />
-// 			</div>
+	const onTextInputChange = (event) => {
+		if (event.target.value.trim()) {
+			const newCourse = Object.assign({}, courseData);
+			newCourse[event.target.name] = event.target.value.trim();
+			setCourseData(newCourse);
+		}
+	};
 
-// 			<label>
-// 				Description
-// 				<textarea data-testid="descriptionTextArea" />
-// 			</label>
+	const onDurationInputChange = (event) => {
+		const filteredValue = event.target.value.replace(/\D/g, '');
+		setDurationValue(filteredValue);
+	};
 
-// 			<div className={styles.infoWrapper}>
-// 				<div>
-// 					{/* // use CreateAuthor component */}
+	const getValidationErrors = (event) => {
+		const newErrors = Object.assign({}, validationErrors);
+		textInputNames.forEach((formName) => {
+			if (!event.target[formName].value.trim()) {
+				newErrors[formName] = `${capitalize(formName)} is required.`;
+			} else if (event.target[formName].value.trim().length < 2) {
+				newErrors[formName] = `${capitalize(
+					formName
+				)} should be at least 2 characters long.`;
+			} else {
+				delete newErrors[formName];
+			}
+		});
 
-// 					{/* // reuse Input component with data-testid='durationInput' for duration field */}
+		if (!durationValue) {
+			newErrors['duration'] = `Duration is required.`;
+		} else if (durationValue === '0') {
+			newErrors['duration'] = `Duration should be bigger than 0.`;
+		} else {
+			delete newErrors['duration'];
+		}
 
-// 					<p>Duration: </p>
-// 				</div>
+		return newErrors;
+	};
 
-// 				<div className={styles.authorsContainer}>
-// 					<strong>Authors</strong>
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		const formValidationErrors = getValidationErrors(event);
+		setValidationErrors(getValidationErrors(event));
 
-// 					{/* // use 'map' to display all available autors. Reuse 'AuthorItem' component for each author */}
+		if (!Object.keys(formValidationErrors).length && !authorNameError) {
+			createCourse(getAllFormDataToSend());
+			navigate('/courses');
+		}
+	};
 
-// 					<strong>Course authors</strong>
+	const onAuthorChange = (event) => {
+		setAuthorName(event.target.value);
+	};
 
-// 					{/* // use 'map' to display course's autors */}
-// 					{/* <p data-testid="selectedAuthor"}>{author.name}</p> */}
+	const onCreateAuthorClick = (event) => {
+		event.preventDefault();
+		if (authorName.trim().length < 2) {
+			setAuthorNameError('Author name should be at least 2 characters long.');
+		} else {
+			createAuthor({ id: `${Date.now()}`, name: authorName.trim() });
+			setAuthorName('');
+			setAuthorNameError('');
+		}
+	};
 
-// 					<p className={styles.notification}>List is empty</p>
-// 					{/* // display this paragraph if there are no authors in the course */}
-// 				</div>
-// 			</div>
-// 		</form>
-// 	);
-// };
+	const getCourseAuthors = () => {
+		return courseAuthors.length ? (
+			<div data-testid='selectedAuthor'>
+				{courseAuthors.map((author) => (
+					<AuthorItem
+						key={author.id}
+						name={author.name}
+						forCourse={true}
+						onDeleteAuthor={(event, i) => deleteAuthor(event, author.id)}
+					/>
+				))}
+			</div>
+		) : (
+			<p className={styles.notification}>List is empty</p>
+		);
+	};
+
+	const getAllFormDataToSend = () => {
+		return {
+			id: `${Date.now()}`,
+			title: courseData.title,
+			description: courseData.description,
+			creationDate: getFormattedDate(new Date()),
+			duration: +durationValue,
+			authors: courseAuthors.map((author) => author.id),
+		};
+	};
+
+	return (
+		<form onSubmit={handleSubmit}>
+			<div>
+				<Input
+					labelText='Title'
+					placeholderText='Input text'
+					name='title'
+					data-testid='titleInput'
+					onChange={onTextInputChange}
+				/>
+				<p className={styles.invalid}>{validationErrors['title']}</p>
+			</div>
+
+			<div>
+				<label>
+					Description
+					<br></br>
+					<textarea
+						data-testid='descriptionTextArea'
+						name='description'
+						onChange={onTextInputChange}
+					/>
+				</label>
+				<p className={styles.invalid}>{validationErrors['description']}</p>
+			</div>
+			<div>
+				<p>
+					<strong>Duration: </strong>
+				</p>
+				<Input
+					labelText='Duration'
+					placeholderText='Input text'
+					name='duration'
+					value={durationValue}
+					onChange={onDurationInputChange}
+					data-testid='durationInput'
+				/>
+				<p>{getCourseDuration(durationValue)}</p>
+				<p className={styles.invalid}>{validationErrors['duration']}</p>
+			</div>
+			<div className={styles.authorsContainer}>
+				<div className={styles.createAuthor}>
+					<strong>Authors</strong>
+					<CreateAuthor
+						onCreateAuthor={onCreateAuthorClick}
+						onChange={onAuthorChange}
+						authorName={authorName}
+						validationError={authorNameError}
+					/>
+				</div>
+
+				<div className={styles.courseAuthors}>
+					<strong>Course authors</strong>
+					{getCourseAuthors()}
+				</div>
+			</div>
+			<div className={styles.authorsList}>
+				<strong>Authors list</strong>
+				<br></br>
+				{authorsList.map((author, i) => (
+					<AuthorItem
+						key={author.id}
+						name={author.name}
+						onAddAuthor={(event, i) => addAuthor(event, author.id)}
+						forCourse={false}
+					/>
+				))}
+			</div>
+			<div className={styles.buttons}>
+				<Button buttonText='Cancel' handleClick={(e) => onCancel(e)} />
+				<Button buttonText={saveCourseBtn} data-testid='createCourseButton' />
+			</div>
+		</form>
+	);
+};
+
+CourseForm.propTypes = {
+	authorsList: PropTypes.array,
+	createCourse: PropTypes.func,
+	createAuthor: PropTypes.func,
+	addAuthor: PropTypes.func,
+	deleteAuthor: PropTypes.func,
+	courseAuthors: PropTypes.array,
+	onCancel: PropTypes.func,
+};
+
+export { CourseForm };

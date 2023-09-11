@@ -1,11 +1,13 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 import { Button } from '../Button';
 import { Input } from '../Input';
 
 import styles from './styles.module.css';
 
-export const Searchbar = ({ handleSearch, onSearchInputChange }) => {
+const Searchbar = ({ handleSearch, onSearchInputChange }) => {
 	const buttonText = 'SEARCH';
 
 	const onInputChange = (event) => {
@@ -23,3 +25,10 @@ export const Searchbar = ({ handleSearch, onSearchInputChange }) => {
 		</div>
 	);
 };
+
+Searchbar.propTypes = {
+	handleSearch: PropTypes.func,
+	onSearchInputChange: PropTypes.func,
+};
+
+export { Searchbar };

@@ -1,16 +1,41 @@
-// import React from "react";
-// import { Button } from "../../../../common";
+import React from 'react';
 
-// export const CreateAuthor = ({onCreateAuthor}) => {
-//   // write your code here
-//   const buttonText = 'CREATE AUTHOR';
+import PropTypes from 'prop-types';
 
-//   return (
-//     <div>
-//       <h2>Add author</h2>
-//       {/* // reuse Input component with data-testid="createAuthorInput" attribute */}
-//       {/* //reuse Button component with data-testid="createAuthorButton" attribute */}
-//       <Button buttonText={buttonText} handleClick={() => {}} data-testid="createAuthorButton" />
-//     </div>
-//   );
-// };
+import { Button, Input } from '../../../../common';
+
+const CreateAuthor = ({
+	onCreateAuthor,
+	onChange,
+	validationError,
+	authorName,
+}) => {
+	const buttonText = 'CREATE AUTHOR';
+
+	return (
+		<div>
+			<Input
+				labelText='Author name'
+				placeholderText='Input text'
+				data-testid='createAuthorInput'
+				onChange={onChange}
+				value={authorName}
+			/>
+			<p style={{ color: 'red' }}>{validationError}</p>
+			<Button
+				buttonText={buttonText}
+				handleClick={onCreateAuthor}
+				data-testid='createAuthorButton'
+			/>
+		</div>
+	);
+};
+
+CreateAuthor.propTypes = {
+	onCreateAuthor: PropTypes.func,
+	onChange: PropTypes.func,
+	validationError: PropTypes.string,
+	authorName: PropTypes.string,
+};
+
+export { CreateAuthor };

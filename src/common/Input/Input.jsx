@@ -1,11 +1,14 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+
 import styles from './styles.module.css';
 
-export const Input = ({
+const Input = ({
 	placeholderText,
 	labelText,
 	name,
+	value,
 	onChange,
 	'data-testid': dataTestId,
 }) => (
@@ -17,6 +20,18 @@ export const Input = ({
 			placeholder={placeholderText}
 			data-testid={dataTestId}
 			name={name}
+			value={value}
 		/>
 	</label>
 );
+
+Input.propTypes = {
+	placeholderText: PropTypes.string,
+	labelText: PropTypes.string,
+	name: PropTypes.string,
+	value: PropTypes.string,
+	onChange: PropTypes.func,
+	'data-testid': PropTypes.string,
+};
+
+export { Input };

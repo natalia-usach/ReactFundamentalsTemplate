@@ -30,16 +30,20 @@ export const getAuthors = async () => {
 	// write your code here
 };
 
-export const getCurrentUser = async () => {
-	// write your code here
-};
+export const getCurrentUser = async () => {};
 
 export const updateCourse = async () => {
 	// write your code here
 };
 
 export const logout = async () => {
-	// write your code here
+	// return await fetch('http://localhost:4000/logout', {
+	// 	method: 'DELETE',
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 		Authorization: window.localStorage.getItem('token'),
+	// 	},
+	// });
 };
 
 export const deleteCourse = async () => {
