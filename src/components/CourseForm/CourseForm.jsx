@@ -100,20 +100,36 @@ const CourseForm = ({
 	};
 
 	const getCourseAuthors = () => {
-		return courseAuthors.length ? (
+		return (
 			<div data-testid='selectedAuthor'>
-				{courseAuthors.map((author) => (
-					<AuthorItem
-						key={author.id}
-						name={author.name}
-						forCourse={true}
-						onDeleteAuthor={(event) => deleteAuthor(event, author.id)}
-					/>
-				))}
+				{courseAuthors.length ? (
+					courseAuthors.map((author) => (
+						<AuthorItem
+							key={author.id}
+							name={author.name}
+							forCourse={true}
+							onDeleteAuthor={(event) => deleteAuthor(event, author.id)}
+						/>
+					))
+				) : (
+					<p className={styles.notification}>List is empty</p>
+				)}
 			</div>
-		) : (
-			<p className={styles.notification}>List is empty</p>
 		);
+		// return courseAuthors.length ? (
+		// 	<div data-testid='selectedAuthor'>
+		// 		{courseAuthors.map((author) => (
+		// 			<AuthorItem
+		// 				key={author.id}
+		// 				name={author.name}
+		// 				forCourse={true}
+		// 				onDeleteAuthor={(event) => deleteAuthor(event, author.id)}
+		// 			/>
+		// 		))}
+		// 	</div>
+		// ) : (
+		// 	<p className={styles.notification}>List is empty</p>
+		// );
 	};
 
 	const getAllFormDataToSend = () => {
