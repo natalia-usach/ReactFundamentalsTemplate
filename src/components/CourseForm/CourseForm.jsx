@@ -66,12 +66,9 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 	};
 
 	const getValidationErrors = (event) => {
-				const newErrors = Object.assign({}, validationErrors);
+		const newErrors = Object.assign({}, validationErrors);
 		textInputNames.forEach((formName) => {
-			if (
-				!event.target[formName].value ||
-				!event.target[formName].value.trim()
-			) {
+			if (!event.target[formName] || !event.target[formName].value.trim()) {
 				newErrors[formName] = `${capitalize(formName)} is required.`;
 			} else if (event.target[formName].value.trim().length < 2) {
 				newErrors[formName] = `${capitalize(
@@ -96,11 +93,12 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const formValidationErrors = getValidationErrors(event);
-		setValidationErrors(getValidationErrors(event));
 
 		if (!Object.keys(formValidationErrors).length && !authorNameError) {
 			createCourse(getAllFormDataToSend());
 			navigate('/courses');
+		} else {
+			setValidationErrors(formValidationErrors);
 		}
 	};
 
@@ -138,20 +136,6 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 				)}
 			</div>
 		);
-		// return courseAuthors.length ? (
-		// 	<div data-testid='selectedAuthor'>
-		// 		{courseAuthors.map((author) => (
-		// 			<AuthorItem
-		// 				key={author.id}
-		// 				name={author.name}
-		// 				forCourse={true}
-		// 				onDeleteAuthor={(event) => deleteAuthor(event, author.id)}
-		// 			/>
-		// 		))}
-		// 	</div>
-		// ) : (
-		// 	<p className={styles.notification}>List is empty</p>
-		// );
 	};
 
 	const getAllFormDataToSend = () => {
