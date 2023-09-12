@@ -66,9 +66,12 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 	};
 
 	const getValidationErrors = (event) => {
-		const newErrors = Object.assign({}, validationErrors);
+				const newErrors = Object.assign({}, validationErrors);
 		textInputNames.forEach((formName) => {
-			if (!event.target[formName].value.trim()) {
+			if (
+				!event.target[formName].value ||
+				!event.target[formName].value.trim()
+			) {
 				newErrors[formName] = `${capitalize(formName)} is required.`;
 			} else if (event.target[formName].value.trim().length < 2) {
 				newErrors[formName] = `${capitalize(
