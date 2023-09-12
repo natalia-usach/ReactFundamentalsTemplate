@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
 
 import {
 	CourseForm,
@@ -20,40 +20,13 @@ import styles from './App.module.css';
 function App() {
 	const [allCourses, setAllCourses] = useState(mockedCoursesList);
 	const [allAuthors, setAllAuthors] = useState(mockedAuthorsList);
-	const [allCourseAuthors, setAllCourseAuthors] = useState(mockedAuthorsList);
-	const [courseAuthors, setCourseAuthors] = useState([]);
-	const navigate = useNavigate();
 
 	const createAuthor = (newAuthor) => {
 		setAllAuthors([...allAuthors, newAuthor]);
-		setAllCourseAuthors([...allCourseAuthors, newAuthor]);
-	};
-
-	const addAuthor = (event, id) => {
-		event.preventDefault();
-		const targetAuthor = allCourseAuthors.find((author) => author.id === id);
-		setAllCourseAuthors([
-			...allCourseAuthors.filter((author) => author.id !== id),
-		]);
-		setCourseAuthors([...courseAuthors, targetAuthor]);
-	};
-
-	const deleteAuthor = (event, id) => {
-		event.preventDefault();
-		const targetAuthor = courseAuthors.find((author) => author.id === id);
-		setAllCourseAuthors([...allCourseAuthors, targetAuthor]);
-		setCourseAuthors([...courseAuthors.filter((author) => author.id !== id)]);
 	};
 
 	const createCourse = (course) => {
 		setAllCourses([...allCourses, course]);
-	};
-
-	const onCancelFormClick = (event) => {
-		event.preventDefault();
-		setAllCourseAuthors(mockedAuthorsList);
-		setCourseAuthors([]);
-		navigate('/courses');
 	};
 
 	return (
@@ -81,13 +54,9 @@ function App() {
 							path='add'
 							element={
 								<CourseForm
-									authorsList={allCourseAuthors}
-									courseAuthors={courseAuthors}
+									authorsList={allAuthors}
 									createAuthor={createAuthor}
-									deleteAuthor={deleteAuthor}
-									addAuthor={addAuthor}
 									createCourse={createCourse}
-									onCancel={onCancelFormClick}
 								/>
 							}
 						></Route>

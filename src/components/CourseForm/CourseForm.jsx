@@ -10,15 +10,7 @@ import { AuthorItem, CreateAuthor } from './components';
 
 import styles from './styles.module.css';
 
-const CourseForm = ({
-	authorsList,
-	createCourse,
-	createAuthor,
-	addAuthor,
-	deleteAuthor,
-	courseAuthors,
-	onCancel,
-}) => {
+const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 	const saveCourseBtn = 'SAVE COURSE';
 	const textInputNames = ['title', 'description'];
 	const [validationErrors, setValidationErrors] = useState({});
@@ -32,8 +24,33 @@ const CourseForm = ({
 		authors: [],
 	});
 	const [authorName, setAuthorName] = useState('');
+	const [courseAuthors, setCourseAuthors] = useState([]);
+	const [allCourseAuthors, setAllCourseAuthors] = useState(authorsList);
 
 	const navigate = useNavigate();
+
+	const addAuthor = (event, id) => {
+		event.preventDefault();
+		const targetAuthor = allCourseAuthors.find((author) => author.id === id);
+		setAllCourseAuthors([
+			...allCourseAuthors.filter((author) => author.id !== id),
+		]);
+		setCourseAuthors([...courseAuthors, targetAuthor]);
+	};
+
+	const deleteAuthor = (event, id) => {
+		event.preventDefault();
+		const targetAuthor = courseAuthors.find((author) => author.id === id);
+		setAllCourseAuthors([...allCourseAuthors, targetAuthor]);
+		setCourseAuthors([...courseAuthors.filter((author) => author.id !== id)]);
+	};
+
+	const onCancel = (event) => {
+		event.preventDefault();
+		setAllCourseAuthors(authorsList);
+		setCourseAuthors([]);
+		navigate('/courses');
+	};
 
 	const onTextInputChange = (event) => {
 		if (event.target.value.trim()) {
@@ -93,7 +110,9 @@ const CourseForm = ({
 		if (authorName.trim().length < 2) {
 			setAuthorNameError('Author name should be at least 2 characters long.');
 		} else {
-			createAuthor({ id: `${Date.now()}`, name: authorName.trim() });
+			const newAuthor = { id: `${Date.now()}`, name: authorName.trim() };
+			createAuthor(newAuthor);
+			setAllCourseAuthors([...allCourseAuthors, newAuthor]);
 			setAuthorName('');
 			setAuthorNameError('');
 		}
@@ -202,7 +221,7 @@ const CourseForm = ({
 			<div className={styles.authorsList}>
 				<strong>Authors list</strong>
 				<br></br>
-				{authorsList.map((author) => (
+				{allCourseAuthors.map((author) => (
 					<AuthorItem
 						key={author.id}
 						name={author.name}
@@ -223,10 +242,6 @@ CourseForm.propTypes = {
 	authorsList: PropTypes.array,
 	createCourse: PropTypes.func,
 	createAuthor: PropTypes.func,
-	addAuthor: PropTypes.func,
-	deleteAuthor: PropTypes.func,
-	courseAuthors: PropTypes.array,
-	onCancel: PropTypes.func,
 };
 
 export { CourseForm };
