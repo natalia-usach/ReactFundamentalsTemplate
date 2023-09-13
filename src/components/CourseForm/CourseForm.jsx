@@ -111,12 +111,7 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 		event.preventDefault();
 		validateForm();
 
-		if (
-			!title.error &&
-			!description.error &&
-			!duration.error &&
-			!authorName.error
-		) {
+		if (!title.error && !description.error && !duration.error) {
 			createCourse(getAllFormDataToSend());
 			navigate('/courses');
 		}
