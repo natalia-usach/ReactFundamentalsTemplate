@@ -12,18 +12,23 @@ import styles from './styles.module.css';
 
 const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 	const saveCourseBtn = 'SAVE COURSE';
-	const textInputNames = ['title', 'description'];
-	const [validationErrors, setValidationErrors] = useState({});
-	const [authorNameError, setAuthorNameError] = useState('');
-	const [durationValue, setDurationValue] = useState('');
-	const [courseData, setCourseData] = useState({
-		title: '',
-		description: '',
-		creationDate: null,
-		duration: null,
-		authors: [],
+
+	const [title, setTitle] = useState({ name: 'title', value: '', error: '' });
+	const [description, setDescription] = useState({
+		name: 'description',
+		value: '',
+		error: '',
 	});
-	const [authorName, setAuthorName] = useState('');
+	const [duration, setDuration] = useState({
+		name: 'duration',
+		value: '',
+		error: '',
+	});
+	const [authorName, setAuthorName] = useState({
+		name: 'authorName',
+		value: '',
+		error: '',
+	});
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [allCourseAuthors, setAllCourseAuthors] = useState(authorsList);
 
@@ -52,70 +57,83 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 		navigate('/courses');
 	};
 
-	const onTextInputChange = (event) => {
-		if (event.target.value.trim()) {
-			const newCourse = Object.assign({}, courseData);
-			newCourse[event.target.name] = event.target.value.trim();
-			setCourseData(newCourse);
-		}
+	const onTitleChange = (event) => {
+		setTitle({ ...title, value: event.target.value.trim() });
+	};
+
+	const onDescriptionChange = (event) => {
+		setDescription({ ...description, value: event.target.value.trim() });
 	};
 
 	const onDurationInputChange = (event) => {
 		const filteredValue = event.target.value.replace(/\D/g, '');
-		setDurationValue(filteredValue);
+		setDuration({ ...duration, value: filteredValue });
 	};
 
-	const getValidationErrors = (event) => {
-		const newErrors = Object.assign({}, validationErrors);
-		textInputNames.forEach((formName) => {
-			if (!event.target[formName] || !event.target[formName].value.trim()) {
-				newErrors[formName] = `${capitalize(formName)} is required.`;
-			} else if (event.target[formName].value.trim().length < 2) {
-				newErrors[formName] = `${capitalize(
-					formName
-				)} should be at least 2 characters long.`;
+	const onAuthorChange = (event) => {
+		setAuthorName({ ...authorName, value: event.target.value.trim() });
+	};
+
+	const addValidationError = (name, msg) => {
+		switch (name) {
+			case 'title':
+				setTitle({ ...title, error: msg });
+				break;
+			case 'description':
+				setDescription({ ...description, error: msg });
+				break;
+			case 'duration':
+				setDuration({ ...duration, error: msg });
+				break;
+			default:
+				return;
+		}
+	};
+
+	const validateForm = () => {
+		[title, description, duration].forEach(({ name, value }) => {
+			if (!value) {
+				addValidationError(name, `${capitalize(name)} is required.`);
+			} else if (value && value.length < 2) {
+				addValidationError(
+					name,
+					`${capitalize(name)} should be at least 2 characters long.`
+				);
+			} else if (name === 'duration' && value === '0') {
+				addValidationError(name, `Duration should be bigger than 0.`);
 			} else {
-				delete newErrors[formName];
+				addValidationError(name, '');
 			}
 		});
-
-		if (!durationValue) {
-			newErrors['duration'] = `Duration is required.`;
-		} else if (durationValue === '0') {
-			newErrors['duration'] = `Duration should be bigger than 0.`;
-		} else {
-			delete newErrors['duration'];
-		}
-
-		return newErrors;
 	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		const formValidationErrors = getValidationErrors(event);
+		validateForm();
 
-		if (!Object.keys(formValidationErrors).length && !authorNameError) {
+		if (
+			!title.error &&
+			!description.error &&
+			!duration.error &&
+			!authorName.error
+		) {
 			createCourse(getAllFormDataToSend());
 			navigate('/courses');
-		} else {
-			setValidationErrors(formValidationErrors);
 		}
-	};
-
-	const onAuthorChange = (event) => {
-		setAuthorName(event.target.value);
 	};
 
 	const onCreateAuthorClick = (event) => {
 		event.preventDefault();
-		if (authorName.trim().length < 2) {
-			setAuthorNameError('Author name should be at least 2 characters long.');
+		if (authorName.value.length < 2) {
+			setAuthorName({
+				...authorName,
+				error: 'Author name should be at least 2 characters long.',
+			});
 		} else {
-			const newAuthor = { id: `${Date.now()}`, name: authorName.trim() };
+			const newAuthor = { id: `${Date.now()}`, name: authorName.value };
 			createAuthor(newAuthor);
 			setAllCourseAuthors([...allCourseAuthors, newAuthor]);
-			setAuthorName('');
-			setAuthorNameError('');
+			setAuthorName({ ...authorName, value: '', error: '' });
 		}
 	};
 
@@ -141,10 +159,10 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 	const getAllFormDataToSend = () => {
 		return {
 			id: `${Date.now()}`,
-			title: courseData.title,
-			description: courseData.description,
+			title: title.value,
+			description: description.value,
 			creationDate: getFormattedDate(new Date()),
-			duration: +durationValue,
+			duration: +duration.value,
 			authors: courseAuthors.map((author) => author.id),
 		};
 	};
@@ -156,10 +174,11 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 					labelText='Title'
 					placeholderText='Input text'
 					name='title'
+					value={title.value}
 					data-testid='titleInput'
-					onChange={onTextInputChange}
+					onChange={onTitleChange}
 				/>
-				<p className={styles.invalid}>{validationErrors['title']}</p>
+				<p className={styles.invalid}>{title.error}</p>
 			</div>
 
 			<div>
@@ -169,10 +188,11 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 					<textarea
 						data-testid='descriptionTextArea'
 						name='description'
-						onChange={onTextInputChange}
+						value={description.value}
+						onChange={onDescriptionChange}
 					/>
 				</label>
-				<p className={styles.invalid}>{validationErrors['description']}</p>
+				<p className={styles.invalid}>{description.error}</p>
 			</div>
 			<div>
 				<p>
@@ -182,12 +202,12 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 					labelText='Duration'
 					placeholderText='Input text'
 					name='duration'
-					value={durationValue}
+					value={duration.value}
 					onChange={onDurationInputChange}
 					data-testid='durationInput'
 				/>
-				<p>{getCourseDuration(durationValue)}</p>
-				<p className={styles.invalid}>{validationErrors['duration']}</p>
+				<p>{getCourseDuration(duration.value)}</p>
+				<p className={styles.invalid}>{duration.error}</p>
 			</div>
 			<div className={styles.authorsContainer}>
 				<div className={styles.createAuthor}>
@@ -195,8 +215,8 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 					<CreateAuthor
 						onCreateAuthor={onCreateAuthorClick}
 						onChange={onAuthorChange}
-						authorName={authorName}
-						validationError={authorNameError}
+						authorName={authorName.value}
+						validationError={authorName.error}
 					/>
 				</div>
 
