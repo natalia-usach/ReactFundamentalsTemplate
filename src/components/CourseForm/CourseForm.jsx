@@ -74,7 +74,7 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 		setAuthorName({ ...authorName, value: event.target.value.trim() });
 	};
 
-	const addValidationError = (name, msg) => {
+	const addValidationErrorToState = (name, msg) => {
 		switch (name) {
 			case 'title':
 				setTitle({ ...title, error: msg });
@@ -90,30 +90,36 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 		}
 	};
 
-	const validateForm = () => {
+	const getValidationErrors = () => {
+		const errors = {};
 		[title, description, duration].forEach(({ name, value }) => {
 			if (!value) {
-				addValidationError(name, `${capitalize(name)} is required.`);
-			} else if (value && value.length < 2) {
-				addValidationError(
-					name,
-					`${capitalize(name)} should be at least 2 characters long.`
-				);
+				errors[name] = `${capitalize(name)} is required.`;
+			} else if (name !== 'duration' && value && value.length < 2) {
+				errors[name] = `${capitalize(
+					name
+				)} should be at least 2 characters long.`;
 			} else if (name === 'duration' && value === '0') {
-				addValidationError(name, `Duration should be bigger than 0.`);
+				errors[name] = `Duration should be bigger than 0.`;
 			} else {
-				addValidationError(name, '');
+				errors[name] = '';
 			}
 		});
+
+		return errors;
 	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		validateForm();
+		const errors = getValidationErrors();
 
-		if (!title.error && !description.error && !duration.error) {
+		if (Object.values(errors).every((error) => error === '')) {
 			createCourse(getAllFormDataToSend());
 			navigate('/courses');
+		} else {
+			for (const key in errors) {
+				addValidationErrorToState(key, errors[key]);
+			}
 		}
 	};
 
