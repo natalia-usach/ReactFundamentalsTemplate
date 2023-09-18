@@ -1,23 +1,27 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
 import { Button } from '../../common';
 import { formatCreationDate, getCourseDuration } from '../../helpers';
+import { authorsSelector, coursesSelector } from '../../store/selectors';
 
 import styles from './styles.module.css';
 
-const CourseInfo = ({ coursesList, authorsList }) => {
+const CourseInfo = () => {
 	const buttonText = 'BACK';
 	const { courseId } = useParams();
+	const courses = useSelector(coursesSelector);
+	const authors = useSelector(authorsSelector);
 
-	const course = coursesList.find((course) => course.id === courseId);
+	const course = courses.find((course) => course.id === courseId);
 
 	const getAuthorsList = () => {
 		const authorNames = [];
 		course.authors.forEach((id) => {
-			authorNames.push(authorsList.find((author) => author.id === id).name);
+			authorNames.push(authors.find((author) => author.id === id).name);
 		});
 
 		return authorNames.map((author) => <li key={author}>{author}</li>);
@@ -54,11 +58,6 @@ const CourseInfo = ({ coursesList, authorsList }) => {
 			</div>
 		</div>
 	);
-};
-
-CourseInfo.propTypes = {
-	coursesList: PropTypes.array,
-	authorsList: PropTypes.array,
 };
 
 export { CourseInfo };
