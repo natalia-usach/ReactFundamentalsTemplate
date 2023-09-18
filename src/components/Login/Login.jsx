@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Button, Input } from '../../common';
 import { capitalize } from '../../helpers';
 import { login } from '../../services';
+import { setUserData } from './../../store/slices/userSlice';
 
 import styles from './styles.module.css';
 
@@ -14,26 +16,28 @@ export const Login = () => {
 
 	const navigate = useNavigate();
 	const [validationErrors, setValidationErrors] = useState({});
-	const [userData, setUserData] = useState({
+	const [userInfo, setUserInfo] = useState({
 		email: '',
 		password: '',
 	});
 	const [responseError, setResponseError] = useState(null);
+	const dispatch = useDispatch();
 
 	const onInputChange = (event) => {
 		if (event.target.value.trim()) {
-			const newUser = Object.assign({}, userData);
+			const newUser = Object.assign({}, userInfo);
 			newUser[event.target.name] = event.target.value.trim();
-			setUserData(newUser);
+			setUserInfo(newUser);
 		}
 	};
 
 	const loginUser = async () => {
-		const { successful, result, user, errors } = await login(userData);
-
+		const { successful, result, user, errors } = await login(userInfo);
 		if (successful) {
+			dispatch(
+				setUserData({ name: user.name, email: user.email, token: result })
+			);
 			window.localStorage.setItem('token', result);
-			window.localStorage.setItem('user', user.name);
 			navigate('/courses');
 		} else {
 			setResponseError(errors ? errors[0] : result);
@@ -53,7 +57,7 @@ export const Login = () => {
 		setValidationErrors(newErrors);
 
 		if (!Object.keys(newErrors).length) {
-			loginUser();
+			await loginUser();
 		}
 	};
 

@@ -9,7 +9,6 @@ import { formatCreationDate, getCourseDuration } from '../../helpers';
 import styles from './styles.module.css';
 
 const CourseInfo = ({ coursesList, authorsList }) => {
-	// Module 2: use 'react-router-dom' 'Link' component for button 'Back'
 	const buttonText = 'BACK';
 	const { courseId } = useParams();
 

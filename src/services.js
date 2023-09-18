@@ -23,11 +23,25 @@ export const login = async (data) => {
 };
 
 export const getCourses = async () => {
-	// write your code here
+	const response = await fetch('http://localhost:4000/courses/all', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	return await response.json();
 };
 
 export const getAuthors = async () => {
-	// write your code here
+	const response = await fetch('http://localhost:4000/authors/all', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});
+
+	return await response.json();
 };
 
 export const getCurrentUser = async () => {};
@@ -37,21 +51,38 @@ export const updateCourse = async () => {
 };
 
 export const logout = async () => {
-	// return await fetch('http://localhost:4000/logout', {
-	// 	method: 'DELETE',
-	// 	headers: {
-	// 		'Content-Type': 'application/json',
-	// 		Authorization: window.localStorage.getItem('token'),
-	// 	},
-	// });
+	return await fetch('http://localhost:4000/logout', {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: window.localStorage.getItem('token'),
+		},
+	});
 };
 
-export const deleteCourse = async () => {
-	// write your code here
+export const deleteCourse = async (id) => {
+	const response = await fetch(`http://localhost:4000/courses/${id}`, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: window.localStorage.getItem('token'),
+		},
+	});
+
+	return await response.json();
 };
 
-export const createCourse = async () => {
-	// write your code here
+export const createCourse = async (course) => {
+	const response = await fetch('http://localhost:4000/courses/add', {
+		method: 'POST',
+		body: JSON.stringify(course),
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: window.localStorage.getItem('token'),
+		},
+	});
+
+	return await response.json();
 };
 
 export const createAuthor = async () => {

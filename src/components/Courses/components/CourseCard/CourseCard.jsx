@@ -1,10 +1,12 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
 import { Button } from '../../../../common';
 import { formatCreationDate, getCourseDuration } from '../../../../helpers';
+import { deleteCourse } from '../../../../store/slices/coursesSlice';
 
 import styles from './styles.module.css';
 
@@ -12,6 +14,7 @@ const CourseCard = ({ course, authorsList }) => {
 	const showCourseBtnText = 'SHOW COURSE';
 	const deleteCourseBtnText = 'DELETE';
 	const updateCourseBtnText = 'UPDATE';
+	const dispatch = useDispatch();
 
 	const getAuthorNames = () => {
 		const authorNames = [];
@@ -21,6 +24,10 @@ const CourseCard = ({ course, authorsList }) => {
 		});
 
 		return authorNames.join(', ');
+	};
+
+	const onDeleteCourse = (id) => {
+		dispatch(deleteCourse(id));
 	};
 
 	return (
@@ -48,7 +55,7 @@ const CourseCard = ({ course, authorsList }) => {
 					</Link>
 					<Button
 						buttonText={deleteCourseBtnText}
-						handleClick={() => {}}
+						handleClick={() => onDeleteCourse(course.id)}
 						data-testid='deleteCourse'
 					/>
 					<Button

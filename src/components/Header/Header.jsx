@@ -1,23 +1,26 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Button } from '../../common';
+import { removeUserData } from '../../store/slices/userSlice';
 import { Logo } from './components';
 
 import styles from './styles.module.css';
 
 export const Header = () => {
-	const isAuthorized = !!window.localStorage.getItem('token');
-	const userName = window.localStorage.getItem('user');
+	const isAuthorized = useSelector((state) => state.user.isAuth);
 	const buttonText = isAuthorized ? 'LOGOUT' : 'LOGIN';
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
+	const dispatch = useDispatch();
+	const userName = useSelector((state) => state.user.name);
 
 	const onBtnClick = () => {
 		navigate('/login');
 		if (isAuthorized) {
+			dispatch(removeUserData());
 			window.localStorage.removeItem('token');
-			window.localStorage.removeItem('user');
 		}
 	};
 

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, Route, Routes } from 'react-router-dom';
 
 import {
@@ -10,24 +11,45 @@ import {
 	PrivateRoute,
 	Registration,
 } from './components';
-// use mocked data till API implementation
-import { mockedAuthorsList, mockedCoursesList } from './constants';
+import { getAuthors, getCourses } from './services';
+import { authorsSelector, coursesSelector } from './store/selectors';
+import { saveAuthor, setAuthors } from './store/slices/authorsSlice';
+import { saveCourse, setCourses } from './store/slices/coursesSlice';
 
 import styles from './App.module.css';
 
-// Task 2 and 3 - wrap your App with redux Provider and BrowserRouter in src/index.js
-
 function App() {
-	const [allCourses, setAllCourses] = useState(mockedCoursesList);
-	const [allAuthors, setAllAuthors] = useState(mockedAuthorsList);
+	const allCourses = useSelector(coursesSelector);
+	const allAuthors = useSelector(authorsSelector);
+	const dispatch = useDispatch();
 
 	const createAuthor = (newAuthor) => {
-		setAllAuthors([...allAuthors, newAuthor]);
+		dispatch(saveAuthor(newAuthor));
 	};
 
-	const createCourse = (course) => {
-		setAllCourses([...allCourses, course]);
+	async function fetchCourses() {
+		const response = await getCourses();
+		if (response.successful) {
+			dispatch(setCourses(response.result));
+		}
+	}
+
+	async function fetchAuthors() {
+		const response = await getAuthors();
+		if (response.successful) {
+			dispatch(setAuthors(response.result));
+		}
+	}
+
+	const addCourse = async (course) => {
+		dispatch(saveCourse(course));
 	};
+
+	useEffect(() => {
+		fetchCourses();
+		fetchAuthors();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<>
@@ -56,7 +78,7 @@ function App() {
 								<CourseForm
 									authorsList={allAuthors}
 									createAuthor={createAuthor}
-									createCourse={createCourse}
+									createCourse={addCourse}
 								/>
 							}
 						></Route>

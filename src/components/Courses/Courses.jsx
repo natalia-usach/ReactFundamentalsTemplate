@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
@@ -43,6 +43,10 @@ const Courses = ({ coursesList, authorsList }) => {
 	const onSearchClick = () => {
 		setFilteredCourses();
 	};
+
+	useEffect(() => {
+		setCoursesToRender(coursesList);
+	}, [coursesList]);
 
 	return coursesList.length ? (
 		<div className={styles.mainContent}>

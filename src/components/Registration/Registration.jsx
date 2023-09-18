@@ -30,20 +30,6 @@ export const Registration = () => {
 		}
 	};
 
-	// const sendNewUser = async() => {
-	// 	const response = await fetch('http://localhost:4000/register', {
-	// 		method: 'POST',
-	// 		body: JSON.stringify(user),
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 	});
-
-	// 	const { successful, errors } = await response.json();
-
-	// 	successful ? navigate("/login") : setResponseError([...errors]);
-	// };
-
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const newErrors = Object.assign({}, validationErrors);
