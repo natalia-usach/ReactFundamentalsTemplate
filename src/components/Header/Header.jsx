@@ -12,6 +12,7 @@ import styles from './styles.module.css';
 export const Header = () => {
 	const isAuthorized = !!localStorage.getItem('token');
 	const buttonText = isAuthorized ? 'LOGOUT' : 'LOGIN';
+
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const dispatch = useDispatch();

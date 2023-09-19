@@ -30,7 +30,7 @@ export const getCourses = async () => {
 		},
 	});
 
-	if (response.status === 200) {
+	if (response.ok) {
 		return await response.json();
 	} else {
 		throw new Error(response.statusText);
@@ -45,7 +45,7 @@ export const getAuthors = async () => {
 		},
 	});
 
-	if (response.status === 200) {
+	if (response.ok) {
 		return await response.json();
 	} else {
 		throw new Error(response.statusText);
