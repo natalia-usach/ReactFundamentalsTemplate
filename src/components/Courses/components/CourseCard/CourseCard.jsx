@@ -1,20 +1,23 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 
 import { Button } from '../../../../common';
 import { formatCreationDate, getCourseDuration } from '../../../../helpers';
+import { authorsSelector } from '../../../../store/selectors';
 import { deleteCourse } from '../../../../store/slices/coursesSlice';
 
 import styles from './styles.module.css';
 
-const CourseCard = ({ course, authorsList }) => {
+const CourseCard = ({ course }) => {
 	const showCourseBtnText = 'SHOW COURSE';
 	const deleteCourseBtnText = 'DELETE';
 	const updateCourseBtnText = 'UPDATE';
+
 	const dispatch = useDispatch();
+	const authorsList = useSelector(authorsSelector);
 
 	const getAuthorNames = () => {
 		const authorNames = [];
@@ -71,7 +74,6 @@ const CourseCard = ({ course, authorsList }) => {
 
 CourseCard.propTypes = {
 	course: PropTypes.object,
-	authorsList: PropTypes.array,
 };
 
 export { CourseCard };

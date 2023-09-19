@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
 
 import { Button, Searchbar } from '../../common';
-import { authorsSelector, coursesSelector } from '../../store/selectors';
+import { coursesSelector } from '../../store/selectors';
 import { CourseCard, EmptyCourseList } from './components';
 
 import styles from './styles.module.css';
@@ -12,7 +12,6 @@ const Courses = () => {
 	const buttonText = 'ADD NEW COURSE';
 
 	const allCourses = useSelector(coursesSelector);
-	const allAuthors = useSelector(authorsSelector);
 	const [searchTxt, setSearchTxt] = useState('');
 	const [coursesToRender, setCoursesToRender] = useState(allCourses);
 
@@ -37,9 +36,7 @@ const Courses = () => {
 
 	const getCoursesToRender = () => {
 		return coursesToRender.map((course) => {
-			return (
-				<CourseCard course={course} authorsList={allAuthors} key={course.id} />
-			);
+			return <CourseCard course={course} key={course.id} />;
 		});
 	};
 

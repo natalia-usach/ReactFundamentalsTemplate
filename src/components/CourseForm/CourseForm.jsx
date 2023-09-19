@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,7 +6,6 @@ import { Button, Input } from '../../common';
 import { capitalize, getCourseDuration } from '../../helpers';
 import { getFormattedDate } from '../../helpers/getFormattedDate';
 import { authorsSelector } from '../../store/selectors';
-import { saveAuthor } from '../../store/slices/authorsSlice';
 import { saveCourse } from '../../store/slices/coursesSlice';
 import { AuthorItem, CreateAuthor } from './components';
 
@@ -17,6 +16,9 @@ const CourseForm = () => {
 
 	const authorsList = useSelector(authorsSelector);
 	const dispatch = useDispatch();
+
+	const navigate = useNavigate();
+
 	const [title, setTitle] = useState({ name: 'title', value: '', error: '' });
 	const [description, setDescription] = useState({
 		name: 'description',
@@ -28,19 +30,12 @@ const CourseForm = () => {
 		value: '',
 		error: '',
 	});
-	const [authorName, setAuthorName] = useState({
-		name: 'authorName',
-		value: '',
-		error: '',
-	});
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [allCourseAuthors, setAllCourseAuthors] = useState(authorsList);
 
-	const navigate = useNavigate();
-
 	const addAuthor = (event, id) => {
 		event.preventDefault();
-		const targetAuthor = allCourseAuthors.find((author) => author.id === id);
+		const targetAuthor = authorsList.find((author) => author.id === id);
 		setAllCourseAuthors([
 			...allCourseAuthors.filter((author) => author.id !== id),
 		]);
@@ -72,10 +67,6 @@ const CourseForm = () => {
 	const onDurationInputChange = (event) => {
 		const filteredValue = event.target.value.replace(/\D/g, '');
 		setDuration({ ...duration, value: filteredValue });
-	};
-
-	const onAuthorChange = (event) => {
-		setAuthorName({ ...authorName, value: event.target.value.trim() });
 	};
 
 	const addValidationErrorToState = (name, msg) => {
@@ -127,21 +118,6 @@ const CourseForm = () => {
 		}
 	};
 
-	const onCreateAuthorClick = (event) => {
-		event.preventDefault();
-		if (authorName.value.length < 2) {
-			setAuthorName({
-				...authorName,
-				error: 'Author name should be at least 2 characters long.',
-			});
-		} else {
-			const newAuthor = { id: `${Date.now()}`, name: authorName.value };
-			dispatch(saveAuthor(newAuthor));
-			setAllCourseAuthors([...allCourseAuthors, newAuthor]);
-			setAuthorName({ ...authorName, value: '', error: '' });
-		}
-	};
-
 	const getCourseAuthors = () => {
 		return (
 			<div data-testid='selectedAuthor'>
@@ -171,6 +147,10 @@ const CourseForm = () => {
 			authors: courseAuthors.map((author) => author.id),
 		};
 	};
+
+	useEffect(() => {
+		setAllCourseAuthors(authorsList);
+	}, [authorsList]);
 
 	return (
 		<form onSubmit={handleSubmit}>
@@ -217,12 +197,7 @@ const CourseForm = () => {
 			<div className={styles.authorsContainer}>
 				<div className={styles.createAuthor}>
 					<strong>Authors</strong>
-					<CreateAuthor
-						onCreateAuthor={onCreateAuthorClick}
-						onChange={onAuthorChange}
-						authorName={authorName.value}
-						validationError={authorName.error}
-					/>
+					<CreateAuthor />
 				</div>
 
 				<div className={styles.courseAuthors}>
