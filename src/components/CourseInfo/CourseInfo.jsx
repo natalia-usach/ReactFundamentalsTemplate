@@ -2,8 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
-import PropTypes from 'prop-types';
-
 import { Button } from '../../common';
 import { formatCreationDate, getCourseDuration } from '../../helpers';
 import { authorsSelector, coursesSelector } from '../../store/selectors';
