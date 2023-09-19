@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
 
-import PropTypes from 'prop-types';
-
 import { Button, Searchbar } from '../../common';
+import { authorsSelector, coursesSelector } from '../../store/selectors';
 import { CourseCard, EmptyCourseList } from './components';
 
 import styles from './styles.module.css';
 
-const Courses = ({ coursesList, authorsList }) => {
+const Courses = () => {
 	const buttonText = 'ADD NEW COURSE';
+
+	const allCourses = useSelector(coursesSelector);
+	const allAuthors = useSelector(authorsSelector);
 	const [searchTxt, setSearchTxt] = useState('');
-	const [coursesToRender, setCoursesToRender] = useState(coursesList);
+	const [coursesToRender, setCoursesToRender] = useState(allCourses);
 
 	const onSearchInputChange = (value) => {
 		if (!value) {
-			setCoursesToRender(coursesList);
+			setCoursesToRender(allCourses);
 		}
 
 		setSearchTxt(value);
@@ -23,7 +26,7 @@ const Courses = ({ coursesList, authorsList }) => {
 
 	const setFilteredCourses = () => {
 		setCoursesToRender(
-			coursesList.filter(({ title, id }) => {
+			allCourses.filter(({ title, id }) => {
 				return (
 					title.toLowerCase().includes(searchTxt) ||
 					id.toLowerCase().includes(searchTxt)
@@ -35,7 +38,7 @@ const Courses = ({ coursesList, authorsList }) => {
 	const getCoursesToRender = () => {
 		return coursesToRender.map((course) => {
 			return (
-				<CourseCard course={course} authorsList={authorsList} key={course.id} />
+				<CourseCard course={course} authorsList={allAuthors} key={course.id} />
 			);
 		});
 	};
@@ -45,10 +48,10 @@ const Courses = ({ coursesList, authorsList }) => {
 	};
 
 	useEffect(() => {
-		setCoursesToRender(coursesList);
-	}, [coursesList]);
+		setCoursesToRender(allCourses);
+	}, [allCourses]);
 
-	return coursesList.length ? (
+	return allCourses.length ? (
 		<div className={styles.mainContent}>
 			<Outlet />
 
@@ -66,11 +69,6 @@ const Courses = ({ coursesList, authorsList }) => {
 	) : (
 		<EmptyCourseList />
 	);
-};
-
-Courses.propTypes = {
-	coursesList: PropTypes.array,
-	authorsList: PropTypes.array,
 };
 
 export { Courses };

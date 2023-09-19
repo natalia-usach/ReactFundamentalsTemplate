@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-import PropTypes from 'prop-types';
 
 import { Button, Input } from '../../common';
 import { capitalize, getCourseDuration } from '../../helpers';
 import { getFormattedDate } from '../../helpers/getFormattedDate';
+import { authorsSelector } from '../../store/selectors';
+import { saveAuthor } from '../../store/slices/authorsSlice';
+import { saveCourse } from '../../store/slices/coursesSlice';
 import { AuthorItem, CreateAuthor } from './components';
 
 import styles from './styles.module.css';
 
-const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
+const CourseForm = () => {
 	const saveCourseBtn = 'SAVE COURSE';
 
+	const authorsList = useSelector(authorsSelector);
+	const dispatch = useDispatch();
 	const [title, setTitle] = useState({ name: 'title', value: '', error: '' });
 	const [description, setDescription] = useState({
 		name: 'description',
@@ -114,7 +118,7 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 		const errors = getValidationErrors();
 
 		if (Object.values(errors).every((error) => error === '')) {
-			createCourse(getAllFormDataToSend());
+			dispatch(saveCourse(getAllFormDataToSend()));
 			navigate('/courses');
 		} else {
 			for (const key in errors) {
@@ -132,7 +136,7 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 			});
 		} else {
 			const newAuthor = { id: `${Date.now()}`, name: authorName.value };
-			createAuthor(newAuthor);
+			dispatch(saveAuthor(newAuthor));
 			setAllCourseAuthors([...allCourseAuthors, newAuthor]);
 			setAuthorName({ ...authorName, value: '', error: '' });
 		}
@@ -244,12 +248,6 @@ const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
 			</div>
 		</form>
 	);
-};
-
-CourseForm.propTypes = {
-	authorsList: PropTypes.array,
-	createCourse: PropTypes.func,
-	createAuthor: PropTypes.func,
 };
 
 export { CourseForm };

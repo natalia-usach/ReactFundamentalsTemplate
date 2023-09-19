@@ -3,18 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Button } from '../../common';
+import { userNameSelector } from '../../store/selectors';
 import { removeUserData } from '../../store/slices/userSlice';
 import { Logo } from './components';
 
 import styles from './styles.module.css';
 
 export const Header = () => {
-	const isAuthorized = useSelector((state) => state.user.isAuth);
+	const isAuthorized = !!localStorage.getItem('token');
 	const buttonText = isAuthorized ? 'LOGOUT' : 'LOGIN';
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 	const dispatch = useDispatch();
-	const userName = useSelector((state) => state.user.name);
+	const userName = useSelector(userNameSelector);
 
 	const onBtnClick = () => {
 		navigate('/login');

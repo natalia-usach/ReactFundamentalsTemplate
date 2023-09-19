@@ -9,7 +9,7 @@ import { authorsSelector, coursesSelector } from '../../store/selectors';
 import styles from './styles.module.css';
 
 const CourseInfo = () => {
-	const buttonText = 'BACK';
+	const buttonText = 'Back';
 	const { courseId } = useParams();
 	const courses = useSelector(coursesSelector);
 	const authors = useSelector(authorsSelector);

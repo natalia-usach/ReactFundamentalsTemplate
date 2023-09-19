@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Outlet, Route, Routes } from 'react-router-dom';
 
 import {
@@ -12,20 +12,13 @@ import {
 	Registration,
 } from './components';
 import { getAuthors, getCourses } from './services';
-import { authorsSelector, coursesSelector } from './store/selectors';
-import { saveAuthor, setAuthors } from './store/slices/authorsSlice';
-import { saveCourse, setCourses } from './store/slices/coursesSlice';
+import { setAuthors } from './store/slices/authorsSlice';
+import { setCourses } from './store/slices/coursesSlice';
 
 import styles from './App.module.css';
 
 function App() {
-	const allCourses = useSelector(coursesSelector);
-	const allAuthors = useSelector(authorsSelector);
 	const dispatch = useDispatch();
-
-	const createAuthor = (newAuthor) => {
-		dispatch(saveAuthor(newAuthor));
-	};
 
 	async function fetchCourses() {
 		const response = await getCourses();
@@ -40,10 +33,6 @@ function App() {
 			dispatch(setAuthors(response.result));
 		}
 	}
-
-	const addCourse = async (course) => {
-		dispatch(saveCourse(course));
-	};
 
 	useEffect(() => {
 		fetchCourses();
@@ -60,28 +49,9 @@ function App() {
 					<Route path='login' element={<Login />}></Route>
 					<Route path='/' element={<PrivateRoute />}></Route>
 					<Route path='courses'>
-						<Route
-							index
-							element={
-								<Courses coursesList={allCourses} authorsList={allAuthors} />
-							}
-						/>
-						<Route
-							path=':courseId'
-							element={
-								<CourseInfo coursesList={allCourses} authorsList={allAuthors} />
-							}
-						></Route>
-						<Route
-							path='add'
-							element={
-								<CourseForm
-									authorsList={allAuthors}
-									createAuthor={createAuthor}
-									createCourse={addCourse}
-								/>
-							}
-						></Route>
+						<Route index element={<Courses />} />
+						<Route path=':courseId' element={<CourseInfo />}></Route>
+						<Route path='add' element={<CourseForm />}></Route>
 					</Route>
 				</Routes>
 				<Outlet />
