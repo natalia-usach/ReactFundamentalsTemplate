@@ -30,10 +30,10 @@ export const getCourses = async () => {
 		},
 	});
 
-	if (response.ok) {
+	try {
 		return await response.json();
-	} else {
-		throw new Error(response.statusText);
+	} catch (error) {
+		throw new Error(error);
 	}
 };
 
@@ -45,10 +45,10 @@ export const getAuthors = async () => {
 		},
 	});
 
-	if (response.ok) {
+	try {
 		return await response.json();
-	} else {
-		throw new Error(response.statusText);
+	} catch (error) {
+		throw new Error(error);
 	}
 };
 
