@@ -1,8 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-export const PrivateRoute = () => {
-	const isAuthorised = !!localStorage.getItem('token');
+import { userRoleSelector } from '../../store/selectors';
 
-	return isAuthorised ? <Navigate to='/courses' /> : <Navigate to='/login' />;
+export const PrivateRoute = ({ children }) => {
+	const role = useSelector(userRoleSelector);
+
+	return role === 'admin' ? children : <Navigate to='/courses' />;
 };

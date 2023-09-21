@@ -52,10 +52,37 @@ export const getAuthors = async () => {
 	}
 };
 
-export const getCurrentUser = async () => {};
+export const getCurrentUser = async () => {
+	const response = await fetch('http://localhost:4000/users/me', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: localStorage.getItem('token'),
+		},
+	});
 
-export const updateCourse = async () => {
-	// write your code here
+	try {
+		return await response.json();
+	} catch (error) {
+		throw new Error(error);
+	}
+};
+
+export const updateCourse = async (id, course) => {
+	const response = await fetch(`http://localhost:4000/courses/${id}`, {
+		method: 'PUT',
+		body: JSON.stringify(course),
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: localStorage.getItem('token'),
+		},
+	});
+
+	try {
+		return await response.json();
+	} catch (error) {
+		throw new Error(error);
+	}
 };
 
 export const logout = async () => {
@@ -63,7 +90,7 @@ export const logout = async () => {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: window.localStorage.getItem('token'),
+			Authorization: localStorage.getItem('token'),
 		},
 	});
 };
@@ -73,11 +100,15 @@ export const deleteCourse = async (id) => {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: window.localStorage.getItem('token'),
+			Authorization: localStorage.getItem('token'),
 		},
 	});
 
-	return await response.json();
+	try {
+		return await response.json();
+	} catch (error) {
+		throw new Error(error);
+	}
 };
 
 export const createCourse = async (course) => {
@@ -86,13 +117,30 @@ export const createCourse = async (course) => {
 		body: JSON.stringify(course),
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: window.localStorage.getItem('token'),
+			Authorization: localStorage.getItem('token'),
 		},
 	});
 
-	return await response.json();
+	try {
+		return await response.json();
+	} catch (error) {
+		throw new Error(error);
+	}
 };
 
-export const createAuthor = async () => {
-	// write your code here
+export const createAuthor = async (author) => {
+	const response = await fetch('http://localhost:4000/authors/add', {
+		method: 'POST',
+		body: JSON.stringify(author),
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: localStorage.getItem('token'),
+		},
+	});
+
+	try {
+		return await response.json();
+	} catch (error) {
+		throw new Error(error);
+	}
 };

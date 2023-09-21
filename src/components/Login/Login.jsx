@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Input } from '../../common';
 import { capitalize } from '../../helpers';
 import { login } from '../../services';
-import { setUserData } from './../../store/slices/userSlice';
+import { getUserThunk } from '../../store/thunks/userThunk';
 
 import styles from './styles.module.css';
 
@@ -32,12 +32,10 @@ export const Login = () => {
 	};
 
 	const loginUser = async () => {
-		const { successful, result, user, errors } = await login(userInfo);
+		const { successful, result, errors } = await login(userInfo);
 		if (successful) {
-			dispatch(
-				setUserData({ name: user.name, email: user.email, token: result })
-			);
-			window.localStorage.setItem('token', result);
+			localStorage.setItem('token', result);
+			dispatch(getUserThunk());
 			navigate('/courses');
 		} else {
 			setResponseError(errors ? errors[0] : result);

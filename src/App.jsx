@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 
 import {
 	CourseForm,
@@ -11,28 +11,23 @@ import {
 	PrivateRoute,
 	Registration,
 } from './components';
-import { getAuthors, getCourses } from './services';
-import { setAuthors } from './store/slices/authorsSlice';
-import { setCourses } from './store/slices/coursesSlice';
+import { isAuthSelector } from './store/selectors';
+import { getAuthorsThunk } from './store/thunks/authorsThunk';
+import { getCoursesThunk } from './store/thunks/coursesThunk';
 
 import styles from './App.module.css';
 
 function App() {
 	const dispatch = useDispatch();
+	const isAuth = useSelector(isAuthSelector);
 
-	async function fetchCourses() {
-		const response = await getCourses();
-		if (response.successful) {
-			dispatch(setCourses(response.result));
-		}
-	}
+	const fetchCourses = () => {
+		dispatch(getCoursesThunk());
+	};
 
-	async function fetchAuthors() {
-		const response = await getAuthors();
-		if (response.successful) {
-			dispatch(setAuthors(response.result));
-		}
-	}
+	const fetchAuthors = () => {
+		dispatch(getAuthorsThunk());
+	};
 
 	useEffect(() => {
 		fetchCourses();
@@ -47,12 +42,31 @@ function App() {
 				<Routes>
 					<Route path='registration' element={<Registration />}></Route>
 					<Route path='login' element={<Login />}></Route>
-					<Route path='/' element={<PrivateRoute />}></Route>
-					<Route path='courses'>
-						<Route index element={<Courses />} />
-						<Route path=':courseId' element={<CourseInfo />}></Route>
-						<Route path='add' element={<CourseForm />}></Route>
-					</Route>
+					<Route
+						path='/'
+						element={
+							isAuth ? <Navigate to='/courses' /> : <Navigate to='/login' />
+						}
+					></Route>
+					<Route path='courses' element={<Courses />}></Route>
+					<Route path='courses/:courseId' element={<CourseInfo />}></Route>
+					<Route
+						exact
+						path='/courses/add'
+						element={
+							<PrivateRoute>
+								<CourseForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path='/courses/update/:courseId'
+						element={
+							<PrivateRoute>
+								<CourseForm />
+							</PrivateRoute>
+						}
+					/>
 				</Routes>
 				<Outlet />
 			</div>

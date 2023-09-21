@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button, Input } from '../../common';
 import { capitalize, getCourseDuration } from '../../helpers';
-import { getFormattedDate } from '../../helpers/getFormattedDate';
-import { authorsSelector } from '../../store/selectors';
-import { saveCourse } from '../../store/slices/coursesSlice';
+import { authorsSelector, coursesSelector } from '../../store/selectors';
+import {
+	createCourseThunk,
+	updateCourseThunk,
+} from '../../store/thunks/coursesThunk';
 import { AuthorItem, CreateAuthor } from './components';
 
 import styles from './styles.module.css';
@@ -15,22 +17,38 @@ const CourseForm = () => {
 	const saveCourseBtn = 'SAVE COURSE';
 
 	const authorsList = useSelector(authorsSelector);
+	const courses = useSelector(coursesSelector);
 	const dispatch = useDispatch();
+	const { courseId } = useParams();
+	const isEdit = !!courseId;
+	const editableCourse = courses.find((course) => course.id === courseId);
 
 	const navigate = useNavigate();
 
-	const [title, setTitle] = useState({ name: 'title', value: '', error: '' });
+	const [title, setTitle] = useState({
+		name: 'title',
+		value: isEdit ? editableCourse.title : '',
+		error: '',
+	});
 	const [description, setDescription] = useState({
 		name: 'description',
-		value: '',
+		value: isEdit ? editableCourse.description : '',
 		error: '',
 	});
 	const [duration, setDuration] = useState({
 		name: 'duration',
-		value: '',
+		value: isEdit ? `${editableCourse.duration}` : '',
 		error: '',
 	});
-	const [courseAuthors, setCourseAuthors] = useState([]);
+
+	const mapAuthorIdsToAuthors = (ids) => {
+		return ids.map((id) => authorsList.find((author) => author.id === id));
+	};
+
+	const [courseAuthors, setCourseAuthors] = useState(
+		isEdit ? mapAuthorIdsToAuthors(editableCourse.authors) : []
+	);
+
 	const [allCourseAuthors, setAllCourseAuthors] = useState(authorsList);
 
 	const addAuthor = (event, id) => {
@@ -109,7 +127,11 @@ const CourseForm = () => {
 		const errors = getValidationErrors();
 
 		if (Object.values(errors).every((error) => error === '')) {
-			dispatch(saveCourse(getAllFormDataToSend()));
+			if (isEdit) {
+				dispatch(updateCourseThunk(courseId, getAllFormDataToSend()));
+			} else {
+				dispatch(createCourseThunk(getAllFormDataToSend()));
+			}
 			navigate('/courses');
 		} else {
 			for (const key in errors) {
@@ -138,19 +160,31 @@ const CourseForm = () => {
 	};
 
 	const getAllFormDataToSend = () => {
-		return {
-			id: `${Date.now()}`,
+		const formData = {
 			title: title.value,
 			description: description.value,
-			creationDate: getFormattedDate(new Date()),
 			duration: +duration.value,
 			authors: courseAuthors.map((author) => author.id),
 		};
+
+		if (isEdit) {
+			formData.id = courseId;
+			formData.creationDate = editableCourse.creationDate;
+		}
+
+		return formData;
 	};
 
 	useEffect(() => {
-		setAllCourseAuthors(authorsList);
-	}, [authorsList]);
+		if (isEdit) {
+			const filtered = authorsList.filter(
+				(author) => !editableCourse.authors.includes(author.id)
+			);
+			setAllCourseAuthors(filtered);
+		} else {
+			setAllCourseAuthors(authorsList);
+		}
+	}, [authorsList, editableCourse?.authors, isEdit]);
 
 	return (
 		<form onSubmit={handleSubmit}>

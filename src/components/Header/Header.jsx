@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Button } from '../../common';
 import { userNameSelector } from '../../store/selectors';
-import { removeUserData } from '../../store/slices/userSlice';
+import { logoutThunk } from '../../store/thunks/userThunk';
 import { Logo } from './components';
 
 import styles from './styles.module.css';
@@ -19,10 +19,9 @@ export const Header = () => {
 	const userName = useSelector(userNameSelector);
 
 	const onBtnClick = () => {
-		navigate('/login');
 		if (isAuthorized) {
-			dispatch(removeUserData());
-			window.localStorage.removeItem('token');
+			dispatch(logoutThunk());
+			navigate('/login');
 		}
 	};
 

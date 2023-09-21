@@ -5,6 +5,7 @@ const initialState = {
 	name: '',
 	email: '',
 	token: localStorage.getItem('token') || '',
+	isAdmin: false,
 };
 
 export const userSlice = createSlice({
@@ -17,6 +18,7 @@ export const userSlice = createSlice({
 			name: payload.name,
 			email: payload.email,
 			token: payload.token,
+			role: payload.role,
 		}),
 		removeUserData: (state) => ({
 			...state,

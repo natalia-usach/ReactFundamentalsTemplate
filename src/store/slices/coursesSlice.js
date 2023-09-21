@@ -10,7 +10,10 @@ export const coursesSlice = createSlice({
 		saveCourse: (state, { payload }) => [...state, payload],
 		deleteCourse: (state, { payload }) =>
 			state.filter((course) => course.id !== payload),
-		// updateCourse:
+		updateCourse: (state, { payload }) => {
+			const index = state.findIndex((course) => course.id === payload.id);
+			state[index] = payload;
+		},
 	},
 });
 

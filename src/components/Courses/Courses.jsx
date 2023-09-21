@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
 
 import { Button, Searchbar } from '../../common';
-import { coursesSelector } from '../../store/selectors';
+import { coursesSelector, userRoleSelector } from '../../store/selectors';
 import { CourseCard, EmptyCourseList } from './components';
 
 import styles from './styles.module.css';
@@ -12,6 +12,7 @@ const Courses = () => {
 	const buttonText = 'ADD NEW COURSE';
 
 	const allCourses = useSelector(coursesSelector);
+	const role = useSelector(userRoleSelector);
 	const [searchTxt, setSearchTxt] = useState('');
 	const [coursesToRender, setCoursesToRender] = useState(allCourses);
 
@@ -57,9 +58,11 @@ const Courses = () => {
 					handleSearch={onSearchClick}
 					onSearchInputChange={onSearchInputChange}
 				/>
-				<Link to='/courses/add'>
-					<Button buttonText={buttonText} />
-				</Link>
+				{role === 'admin' ? (
+					<Link to='/courses/add'>
+						<Button buttonText={buttonText} />
+					</Link>
+				) : null}
 			</div>
 			<div>{getCoursesToRender()}</div>
 		</div>

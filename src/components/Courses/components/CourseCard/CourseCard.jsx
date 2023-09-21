@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 
 import { Button } from '../../../../common';
 import { formatCreationDate, getCourseDuration } from '../../../../helpers';
-import { authorsSelector } from '../../../../store/selectors';
-import { deleteCourse } from '../../../../store/slices/coursesSlice';
+import { authorsSelector, userRoleSelector } from '../../../../store/selectors';
+import { deleteCourseThunk } from '../../../../store/thunks/coursesThunk';
 
 import styles from './styles.module.css';
 
@@ -18,6 +18,7 @@ const CourseCard = ({ course }) => {
 
 	const dispatch = useDispatch();
 	const authorsList = useSelector(authorsSelector);
+	const role = useSelector(userRoleSelector);
 
 	const getAuthorNames = () => {
 		const authorNames = [];
@@ -30,7 +31,7 @@ const CourseCard = ({ course }) => {
 	};
 
 	const onDeleteCourse = (id) => {
-		dispatch(deleteCourse(id));
+		dispatch(deleteCourseThunk(id));
 	};
 
 	return (
@@ -56,16 +57,22 @@ const CourseCard = ({ course }) => {
 					<Link to={`/courses/${course.id}`}>
 						<Button buttonText={showCourseBtnText} />
 					</Link>
-					<Button
-						buttonText={deleteCourseBtnText}
-						handleClick={() => onDeleteCourse(course.id)}
-						data-testid='deleteCourse'
-					/>
-					<Button
-						buttonText={updateCourseBtnText}
-						handleClick={() => {}}
-						data-testid='updateCourse'
-					/>
+					{role === 'admin' ? (
+						<>
+							<Button
+								buttonText={deleteCourseBtnText}
+								handleClick={() => onDeleteCourse(course.id)}
+								data-testid='deleteCourse'
+							/>
+							<Link to={`/courses/update/${course.id}`}>
+								<Button
+									buttonText={updateCourseBtnText}
+									handleClick={() => {}}
+									data-testid='updateCourse'
+								/>
+							</Link>
+						</>
+					) : null}
 				</div>
 			</div>
 		</div>

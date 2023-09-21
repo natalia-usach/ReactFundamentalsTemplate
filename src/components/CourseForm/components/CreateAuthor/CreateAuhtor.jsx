@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { Button, Input } from '../../../../common';
-import { saveAuthor } from '../../../../store/slices/authorsSlice';
+import { createAuthorThunk } from '../../../../store/thunks/authorsThunk';
 
 const CreateAuthor = () => {
 	const buttonText = 'CREATE AUTHOR';
@@ -27,8 +27,8 @@ const CreateAuthor = () => {
 				error: 'Author name should be at least 2 characters long.',
 			});
 		} else {
-			const newAuthor = { id: `${Date.now()}`, name: authorName.value };
-			dispatch(saveAuthor(newAuthor));
+			const newAuthor = { name: authorName.value };
+			dispatch(createAuthorThunk(newAuthor));
 			setAuthorName({ ...authorName, value: '', error: '' });
 		}
 	};
