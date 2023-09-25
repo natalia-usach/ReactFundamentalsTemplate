@@ -14,6 +14,7 @@ import {
 import { isAuthSelector } from './store/selectors';
 import { getAuthorsThunk } from './store/thunks/authorsThunk';
 import { getCoursesThunk } from './store/thunks/coursesThunk';
+import { getUserThunk } from './store/thunks/userThunk';
 
 import styles from './App.module.css';
 
@@ -30,6 +31,10 @@ function App() {
 	};
 
 	useEffect(() => {
+		if (localStorage.getItem('token')) {
+			dispatch(getUserThunk());
+		}
+
 		fetchCourses();
 		fetchAuthors();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
