@@ -26,7 +26,6 @@ export const logoutThunk = () => {
 			await logout();
 
 			dispatch(removeUserData());
-			localStorage.removeItem('token');
 		} catch (error) {
 			throw new Error(error);
 		}

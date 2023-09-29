@@ -21,6 +21,7 @@ export const Header = () => {
 	const onBtnClick = () => {
 		if (isAuthorized) {
 			dispatch(logoutThunk());
+			localStorage.removeItem('token');
 			navigate('/login');
 		}
 	};
@@ -29,7 +30,7 @@ export const Header = () => {
 		if (
 			pathname === '/login' ||
 			pathname === '/registration' ||
-			!window.localStorage.getItem('token')
+			!localStorage.getItem('token')
 		) {
 			return;
 		} else {
