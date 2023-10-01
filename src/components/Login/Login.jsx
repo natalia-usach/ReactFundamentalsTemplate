@@ -46,7 +46,7 @@ export const Login = () => {
 		event.preventDefault();
 		const newErrors = Object.assign({}, validationErrors);
 		formNames.forEach((formName) => {
-			if (!event.target[formName].value.trim()) {
+			if (!event.target[formName]?.value.trim()) {
 				newErrors[formName] = `${capitalize(formName)} is required.`;
 			} else {
 				delete newErrors[formName];

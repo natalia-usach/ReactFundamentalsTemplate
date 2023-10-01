@@ -22,7 +22,6 @@ const CourseForm = () => {
 	const { courseId } = useParams();
 	const isEdit = !!courseId;
 	const editableCourse = courses.find((course) => course.id === courseId);
-
 	const navigate = useNavigate();
 
 	const [title, setTitle] = useState({

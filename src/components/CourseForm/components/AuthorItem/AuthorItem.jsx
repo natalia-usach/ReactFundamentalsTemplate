@@ -18,7 +18,7 @@ const AuthorItem = ({ name, onAddAuthor, onDeleteAuthor, forCourse }) => {
 						data-testid='addAuthor'
 					/>
 				) : (
-					<Button buttonText='&#128465;' handleClick={onDeleteAuthor} />
+					<Button buttonText='Delete' handleClick={onDeleteAuthor} />
 				)}
 			</div>
 		</div>

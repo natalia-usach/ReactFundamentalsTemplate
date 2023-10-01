@@ -23,9 +23,9 @@ export const Registration = () => {
 	const [responseError, setResponseError] = useState(null);
 
 	const onInputChange = (event) => {
-		if (event.target.value.trim()) {
+		if (event.target.value?.trim()) {
 			const newUser = Object.assign({}, user);
-			newUser[event.target.name] = event.target.value.trim();
+			newUser[event.target.name] = event.target.value?.trim();
 			setUser(newUser);
 		}
 	};
@@ -34,7 +34,7 @@ export const Registration = () => {
 		event.preventDefault();
 		const newErrors = Object.assign({}, validationErrors);
 		formNames.forEach((formName) => {
-			if (!event.target[formName].value.trim()) {
+			if (!event.target[formName]?.value?.trim()) {
 				newErrors[formName] = `${capitalize(formName)} is required.`;
 			} else {
 				delete newErrors[formName];
